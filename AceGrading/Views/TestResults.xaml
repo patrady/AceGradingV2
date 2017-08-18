@@ -1,0 +1,1208 @@
+﻿<UserControl x:Class="AceGrading.TestResults"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AceGrading"
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="900">
+    <UserControl.Resources>
+        <Style x:Key="GrayTabToggle" TargetType="{x:Type ToggleButton}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                        <Border x:Name="main_Grid" CornerRadius="5" Height="35">
+                            <TextBlock Text="{TemplateBinding  Property=ContentStringFormat}"
+                                       VerticalAlignment="Center"
+                                       Margin="20,0,0,0"
+                                       Foreground="{StaticResource DarkGray3}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="main_Grid" Property="Background" Value="{StaticResource Gray1}"/>
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="False">
+                                <Setter TargetName="main_Grid" Property="Background" Value="Transparent"/>
+                            </Trigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsMouseOver" Value="True"/>
+                                    <Condition Property="IsChecked" Value="False"/>
+                                </MultiTrigger.Conditions>
+                                <Setter TargetName="main_Grid" Property="Background" Value="{StaticResource LightGray3}"/>
+                            </MultiTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!--RepeatButton Style-->
+        <Style x:Key="SliderRepeatButtonStyle" TargetType="{x:Type RepeatButton}">
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="IsTabStop" Value="False"/>
+            <Setter Property="Focusable" Value="False"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RepeatButton}">
+                        <Rectangle Fill="Transparent"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!--Thumb Style-->
+        <Style x:Key="SliderThumbStyle" TargetType="{x:Type Thumb}">
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Thumb}">
+                        <Grid>
+                            <Border Name="outerBorder"
+                                    Background="#5534b4e3"
+                                    BorderBrush="#5534b4e3"
+                                    Height="26" 
+                                    Width="26"
+                                    Opacity="1"
+                                    BorderThickness="2"
+                                    CornerRadius="13"/>
+                            <Border Name="innerBorder"
+                                    Background="#FF34B4E3"
+                                    BorderBrush="#ff34b4e3"
+                                    Height="10"
+                                    Width="10"
+                                    CornerRadius="5"
+                                    Opacity="1"/>
+                        </Grid>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="outerBorder" Property="BorderBrush" Value="#BB34b4e3"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="outerBorder" Property="Background" Value="#55acacac"/>
+                                <Setter TargetName="outerBorder" Property="BorderBrush" Value="#55acacac"/>
+                                <Setter TargetName="innerBorder" Property="Width" Value="4"/>
+                                <Setter TargetName="innerBorder" Property="Height" Value="4"/>
+                                <Setter TargetName="innerBorder" Property="CornerRadius" Value="2"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <!--Vertical Slider Template-->
+        <ControlTemplate x:Key="VerticalSlider" TargetType="{x:Type Slider}">
+            <Grid Margin="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition MinWidth="{TemplateBinding MinWidth}"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <TickBar x:Name="TopTick" 
+                         Visibility="Collapsed"
+                         Fill="LightGray"
+                         Placement="Left"
+                         SnapsToDevicePixels="True"
+                         Width="4"
+                         Margin="0,0,2,0"/>
+                <Border x:Name="TrackBackground"
+                        Grid.Column="1"
+                        Margin="0,10"
+                        BorderThickness="2"
+                        BorderBrush="LightGray"
+                        HorizontalAlignment="Center"
+                        Width="4"/>
+                <Track x:Name="PART_Track"
+                       Grid.Column="1">
+                    <Track.DecreaseRepeatButton>
+                        <RepeatButton Command="{x:Static Slider.DecreaseLarge}"
+                                      Style="{StaticResource SliderRepeatButtonStyle}"/>
+                    </Track.DecreaseRepeatButton>
+                    <Track.IncreaseRepeatButton>
+                        <RepeatButton Command="{x:Static Slider.IncreaseLarge}"
+                                      Style="{StaticResource SliderRepeatButtonStyle}"/>
+                    </Track.IncreaseRepeatButton>
+                    <Track.Thumb>
+                        <Thumb x:Name="Thumb"
+                               Style="{StaticResource SliderThumbStyle}"/>
+                    </Track.Thumb>
+                </Track>
+                <TickBar x:Name="BottomTick"
+                         Grid.Column="2"
+                         Visibility="Collapsed"
+                         Fill="LightGray"
+                         Placement="Right"
+                         SnapsToDevicePixels="True"
+                         Width="4"
+                         Margin="2,0,0,0"/>
+            </Grid>
+            <ControlTemplate.Triggers>
+                <Trigger Property="TickPlacement" Value="TopLeft">
+                    <Setter TargetName="TopTick" Property="Visibility" Value="Visible"/>
+                </Trigger>
+                <Trigger Property="TickPlacement" Value="BottomRight">
+                    <Setter TargetName="BottomTick" Property="Visibility" Value="Visible"/>
+                </Trigger>
+                <Trigger Property="TickPlacement" Value="Both">
+                    <Setter TargetName="TopTick" Property="Visibility" Value="Visible"/>
+                    <Setter TargetName="BottomTick" Property="Visibility" Value="Visible"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+        
+        <!--Horizontal Slider Template-->
+        <ControlTemplate x:Key="HorizontalSlider" TargetType="{x:Type Slider}">
+            <Grid Margin="5">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto" MinHeight="{TemplateBinding MinHeight}"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <TickBar x:Name="TopTick" 
+                         Visibility="Collapsed"
+                         Placement="Top"
+                         Height="4"
+                         SnapsToDevicePixels="True"
+                         Margin="0,0,0,2"/>
+                <Border x:Name="TrackBackground"
+                        Grid.Row="1"
+                        Margin="10,0"
+                        BorderThickness="2"
+                        BorderBrush="LightGray"
+                        VerticalAlignment="Center"
+                        Height="4"/>
+                <Track x:Name="PART_Track"
+                       Grid.Row="1">
+                    <Track.DecreaseRepeatButton>
+                        <RepeatButton Command="{x:Static Slider.DecreaseLarge}"
+                                      Style="{StaticResource SliderRepeatButtonStyle}"/>
+                    </Track.DecreaseRepeatButton>
+                    <Track.IncreaseRepeatButton>
+                        <RepeatButton Command="{x:Static Slider.IncreaseLarge}"
+                                      Style="{StaticResource SliderRepeatButtonStyle}"/>
+                    </Track.IncreaseRepeatButton>
+                    <Track.Thumb>
+                        <Thumb x:Name="Thumb"
+                               Style="{StaticResource SliderThumbStyle}"/>
+                    </Track.Thumb>
+                </Track>
+                <TickBar x:Name="BottomTick"
+                         Grid.Row="2"
+                         Visibility="Collapsed"
+                         Placement="Bottom"
+                         SnapsToDevicePixels="True"
+                         Height="4"
+                         Margin="0,2,0,0"/>
+            </Grid>
+            <ControlTemplate.Triggers>
+                <Trigger Property="TickPlacement" Value="TopLeft">
+                    <Setter TargetName="TopTick" Property="Visibility" Value="Visible"/>
+                </Trigger>
+                <Trigger Property="TickPlacement" Value="BottomRight">
+                    <Setter TargetName="BottomTick" Property="Visibility" Value="Visible"/>
+                </Trigger>
+                <Trigger Property="TickPlacement" Value="Both">
+                    <Setter TargetName="TopTick" Property="Visibility" Value="Visible"/>
+                    <Setter TargetName="BottomTick" Property="Visibility" Value="Visible"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+
+        <!--Focused Slider Style-->
+        <Style x:Key="MyFocusVisualStyle">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle x:Name="FocusStyle"
+                                   StrokeDashArray="4 4"
+                                   RadiusX="5"
+                                   RadiusY="5"
+                                   Fill="Transparent"
+                                   Stroke="#99029cc7"
+                                   StrokeThickness="1"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!--Slider Style-->
+        <Style x:Key="SliderStyle" TargetType="{x:Type Slider}">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource MyFocusVisualStyle}"/>
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Style.Triggers>
+                <Trigger Property="Orientation" Value="Horizontal">
+                    <Setter Property="MinWidth" Value="104"/>
+                    <Setter Property="MinHeight" Value="21"/>
+                    <Setter Property="Template" Value="{StaticResource HorizontalSlider}"/>
+                </Trigger>
+                <Trigger Property="Orientation" Value="Vertical">
+                    <Setter Property="MinWidth" Value="21"/>
+                    <Setter Property="MinHeight" Value="104"/>
+                    <Setter Property="Template" Value="{StaticResource VerticalSlider}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <!--DESIGN MODE VIEW SWITCHER-->
+        <DockPanel HorizontalAlignment="Center" VerticalAlignment="Top">
+            <RadioButton Name="NoTests_RB"    Content="No Tests"     Margin="3" IsChecked="False"/>
+            <RadioButton Name="SelectTest_RB" Content="Select Tests" Margin="3" IsChecked="False"/>
+            <RadioButton Name="ResultsView_RB" Content="Test Results" Margin="3" IsChecked="False"/>
+            <RadioButton Name="TestCurve_RB" Content="Test Curve" Margin="3" IsChecked="False"/>
+            <RadioButton Name="PrintAnswers_RB" Content="Print" Margin="3" IsChecked="False"/>
+            <RadioButton Name="ExportTo_Rb" Content="Export" Margin="3" IsChecked="True"/>
+        </DockPanel>
+
+        <!--Select Test to Grade Grid-->
+        <Grid Name="ViewTests_Grid" 
+                  Grid.Row="1" 
+                  Visibility="{Binding ElementName=SelectTest_RB, Path=IsChecked, Converter={StaticResource BoolToVis}}">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="100"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition/>
+                <RowDefinition Height="80"/>
+            </Grid.RowDefinitions>
+
+            <!--Header-->
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Center"
+                        Grid.Row="1">
+
+                <!--Number of Test Questions-->
+                <local:LargeNumber Number="27" 
+                                   Label="Test Questions"
+                                   Size="Medium"
+                                   Margin="20,0"/>
+
+                <!--Test Date-->
+                <local:LargeNumber Number="May 23" 
+                                   Label="Date Taken"
+                                   Size="Medium"
+                                   Margin="20,0"/>
+
+                <!--Manual Grading-->
+                <local:LargeNumber Number="May 26" 
+                                   Label="Date Graded"
+                                   Size="Medium"
+                                   Margin="20,0"/>
+            </StackPanel>
+
+            <!--Instructions-->
+            <local:InstructionsUIHelper Label="Select a Test to view Results" 
+                                        Grid.Row="2"/>
+
+            <!--Body-->
+            <ListBox Name="classListbx" 
+                     Background="Transparent" 
+                     BorderBrush="{x:Null}" 
+                     Grid.Row="3"
+                     HorizontalAlignment="Center"
+                     ScrollViewer.VerticalScrollBarVisibility="Auto" 
+                     HorizontalContentAlignment="Stretch" 
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Name="ClassItem" 
+                              Height="150" 
+                              Width="150" 
+                              Background="Transparent"
+                              Margin="5">
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition Height="50"/>
+                            </Grid.RowDefinitions>
+
+                            <!--Class Info-->
+                            <local:CircleInitials Type="Test" 
+                                                  Initials="{Binding TestInitials}"/>
+                            <TextBlock Text="{Binding TestName}" 
+                                       Grid.Row="1" 
+                                       TextWrapping="Wrap" 
+                                       Foreground="{StaticResource DarkGray1}"
+                                       VerticalAlignment="Top" 
+                                       TextAlignment="Center"
+                                       Padding="2"/>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+                <ListBox.Items>
+                    <local:Test TestName="Test One"/>
+                    <local:Test TestName="Test Two"/>
+                    <local:Test TestName="Test Three"/>
+                    <local:Test TestName="Test Four"/>
+                    <local:Test TestName="Test Five"/>
+                    <local:Test TestName="Test Six"/>
+                    <local:Test TestName="Test Seven"/>
+                    <local:Test TestName="Test Eight"/>
+                    <local:Test TestName="Test Nine"/>
+                    <local:Test TestName="Test Ten"/>
+                    <local:Test TestName="Test Eleven"/>
+                    <local:Test TestName="Test Twelve"/>
+                    <local:Test TestName="Test Thirteen"/>
+                    <local:Test TestName="Test Fourteen"/>
+                    <local:Test TestName="Test Fifteen"/>
+                </ListBox.Items>
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+            </ListBox>
+
+            <!--Footer-->
+            <WrapPanel Grid.Row="4"
+                       HorizontalAlignment="Right" 
+                       VerticalAlignment="Center">
+                <Button Content="Reset"
+                        Style="{StaticResource FlatBlueBtn}"
+                        Margin="5,0"/>
+
+                <Button Content="Continue" 
+                        Style="{StaticResource FlatBlueBtn}" 
+                        Margin="5,0"/>
+            </WrapPanel>
+        </Grid>
+
+        <!--No Tests Grid-->
+        <Grid Name="NoTests_Grid" 
+              Visibility="{Binding ElementName=NoTests_RB, Path=IsChecked, Converter={StaticResource BoolToVis}}"
+              Grid.Row="1">
+
+            <StackPanel  VerticalAlignment="Center">
+
+                <!--"You Seem to have no tests..." Textbox-->
+                <TextBlock TextAlignment="Center" 
+                           FontSize="20">
+                            This class seems to have no tests,<LineBreak/> would you like to create one?
+                </TextBlock>
+
+                <!--Create First Class Button-->
+                <Button Style="{StaticResource FlatGreenBtn}" 
+                        Content="Create a Test" 
+                        HorizontalAlignment="Center" 
+                        Margin="0,20,0,0"/>
+
+            </StackPanel>
+        </Grid>
+
+        <!--View Test Results Grid-->
+        <Grid Name="ViewResults_Grid"
+              Visibility="{Binding ElementName=ResultsView_RB, Path=IsChecked, Converter={StaticResource BoolToVis}}"
+              Grid.Row="1">
+           
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="250"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="50"/>
+                </Grid.RowDefinitions>
+
+                <!--Overall Statistics-->
+                <StackPanel Grid.Row="0">
+                    <!--Instructions-->
+                    <local:InstructionsUIHelper Label="Overall Statistics"/>
+
+                    <!--Statistics Charts-->
+                    <Grid HorizontalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition MaxWidth="200"/>
+                            <ColumnDefinition MaxWidth="200"/>
+                            <ColumnDefinition MaxWidth="200"/>
+                            <ColumnDefinition MaxWidth="200"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!--Highest Score-->
+                        <local:CircleProgressBar Value="100"
+                                                 StrokeColor="{StaticResource FlatGreen}"
+                                                 Foreground="{StaticResource DarkGray1}"
+                                                 Label="Highest Score"/>
+
+                        <!--Average Score-->
+                        <local:CircleProgressBar Value="75"
+                                                 StrokeColor="{StaticResource FlatYellow}"
+                                                 Foreground="{StaticResource DarkGray1}"
+                                                 Label="Average Score"
+                                                 Grid.Column="1"/>
+
+                        <!--Lowest Score-->
+                        <local:CircleProgressBar Value="60"
+                                                 StrokeColor="{StaticResource FlatRed}"
+                                                 Foreground="{StaticResource DarkGray1}"
+                                                 Label="Average Score"
+                                                 Grid.Column="2"/>
+
+                        <!--Most Missed Problem-->
+                        <local:LargeNumber Number="17"
+                                       Label="Most Missed Problem"
+                                       LabelWidth="100"
+                                       Grid.Column="3"/>
+
+                    </Grid>
+                </StackPanel>
+
+
+                <!--Individual Statistics-->
+                <Grid Grid.Row="1"
+                    Margin="0,10,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    
+                    <!--Instructions-->
+                    <local:InstructionsUIHelper Label="Individual Statistics"
+                                                Grid.Row="0"/>
+                    
+                    <!--Question / Student Switch-->
+                    <local:Switch x:Name="QuestionStudent_Switch" 
+                                  LeftLabel="Question"
+                                  RightLabel="Student"
+                                  Grid.Row="1"
+                                  MaxWidth="300"/>
+                    
+                    <!--Question / Student Data Table-->
+                    <Grid Grid.Row="2"
+                          HorizontalAlignment="Center">
+
+                        <!--Student Data Table-->
+                        <DataGrid Visibility="{Binding ElementName=QuestionStudent_Switch, Path=IsRightChecked, Converter={StaticResource BoolToVis}}" 
+                                  AlternatingRowBackground="{StaticResource LightGray2}" 
+                                  RowBackground="{StaticResource Gray1}" 
+                                  RowHeight="25"
+                                  VerticalAlignment="Top"
+                                  RowHeaderWidth="0"
+                                  HorizontalGridLinesBrush="{x:Null}"
+                                  VerticalGridLinesBrush="{x:Null}"
+                                  BorderBrush="{x:Null}">
+
+                            <DataGrid.Columns>
+                                <!--Test Name Column-->
+                                <DataGridTextColumn MinWidth="300" 
+                                                    Binding="{Binding Name}" 
+                                                    Header="Student"/>
+
+                                <!--Test Date Column-->
+                                <DataGridTextColumn Header="Score"
+                                                    Binding="{Binding TestScore, StringFormat={}{0}%}" 
+                                                    MinWidth="150"/>
+
+                                <!--Test Score Column-->
+                                <DataGridTextColumn Header="View Test"
+                                                    
+                                                    MinWidth="150"/>
+                            </DataGrid.Columns>
+                            <DataGrid.ColumnHeaderStyle>
+                                <Style TargetType="DataGridColumnHeader">
+                                    <Setter Property="Background" Value="{StaticResource FlatGreen}"/>
+                                    <Setter Property="Foreground" Value="White"/>
+                                    <Setter Property="Height" Value="30"/>
+                                    <Setter Property="BorderBrush" Value="{StaticResource LightGray2}"/>
+                                    <Setter Property="BorderThickness" Value="0.7,0"/>
+                                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="{DynamicResource Green}"/>
+                                        </Trigger>
+                                        <Trigger Property="IsMouseOver" Value="False">
+                                            <Setter Property="Background" Value="{DynamicResource LightGreen}"/>
+                                        </Trigger>
+                                        <Trigger Property="IsPressed" Value="True">
+                                            <Setter Property="Background" Value="{DynamicResource DarkGreen}"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGrid.ColumnHeaderStyle>
+                            <DataGrid.CellStyle>
+                                <Style TargetType="DataGridCell">
+                                    <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                                    <Setter Property="Foreground" Value="{StaticResource DarkGray1}"/>
+                                    <Setter Property="BorderBrush" Value="{x:Null}"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="DataGridCell.IsSelected" Value="True">
+                                            <Setter Property="Background" Value="{StaticResource LightBlue}"/>
+                                            <Setter Property="BorderBrush" Value="{x:Null}"/>
+                                            <Setter Property="Foreground" Value="White"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGrid.CellStyle>
+                            <DataGrid.Items>
+                                <local:Student Name="Student #1" TestScore="98"/>
+                                <local:Student Name="Student #2" TestScore="56"/>
+                                <local:Student Name="Student #3" TestScore="48"/>
+                                <local:Student Name="Student #4" TestScore="63"/>
+                                <local:Student Name="Student #5" TestScore="79"/>
+                                <local:Student Name="Student #6" TestScore="42"/>
+                                <local:Student Name="Student #7" TestScore="85"/>
+                                <local:Student Name="Student #8" TestScore="93"/>
+                                <local:Student Name="Student #9" TestScore="97"/>
+                                <local:Student Name="Student #10" TestScore="91"/>
+                                <local:Student Name="Student #11" TestScore="83"/>
+                                <local:Student Name="Student #12" TestScore="82"/>
+                                <local:Student Name="Student #13" TestScore="76"/>
+                                <local:Student Name="Student #14" TestScore="78"/>
+                            </DataGrid.Items>
+                        </DataGrid>
+                        
+                        <!--Question Data Table-->
+                        <DataGrid Visibility="{Binding ElementName=QuestionStudent_Switch, Path=IsLeftChecked, Converter={StaticResource BoolToVis}}" 
+                                  AlternatingRowBackground="{StaticResource LightGray2}" 
+                                  RowBackground="{StaticResource Gray1}" 
+                                  RowHeight="25"
+                                  VerticalAlignment="Top"
+                                  RowHeaderWidth="0"
+                                  HorizontalGridLinesBrush="{x:Null}"
+                                  VerticalGridLinesBrush="{x:Null}"
+                                  BorderBrush="{x:Null}">
+
+                            <DataGrid.Columns>
+                                <!--Test Name Column-->
+                                <DataGridTextColumn Binding="{Binding Number, StringFormat={}Question #{0}}" 
+                                            MinWidth="300" 
+                                            Header="Question"/>
+
+                                <!--Test Date Column-->
+                                <DataGridTextColumn Binding="{Binding Correctly_Answered, StringFormat={}{0} %}" 
+                                            MinWidth="150" 
+                                            Header="Percent Correct"/>
+
+                                <!--Test Score Column-->
+                                <DataGridTextColumn Binding="{Binding AverageScore, StringFormat={}{0}%}" 
+                                            MinWidth="150" 
+                                            Header="Recommendation"/>
+
+                            </DataGrid.Columns>
+                            <DataGrid.ColumnHeaderStyle>
+                                <Style TargetType="DataGridColumnHeader">
+                                    <Setter Property="Background" Value="{StaticResource FlatGreen}"/>
+                                    <Setter Property="Foreground" Value="White"/>
+                                    <Setter Property="Height" Value="30"/>
+                                    <Setter Property="BorderBrush" Value="{StaticResource LightGray2}"/>
+                                    <Setter Property="BorderThickness" Value="0.7,0"/>
+                                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="{DynamicResource Green}"/>
+                                        </Trigger>
+                                        <Trigger Property="IsMouseOver" Value="False">
+                                            <Setter Property="Background" Value="{DynamicResource LightGreen}"/>
+                                        </Trigger>
+                                        <Trigger Property="IsPressed" Value="True">
+                                            <Setter Property="Background" Value="{DynamicResource DarkGreen}"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGrid.ColumnHeaderStyle>
+                            <DataGrid.CellStyle>
+                                <Style TargetType="DataGridCell">
+                                    <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                                    <Setter Property="Foreground" Value="{StaticResource DarkGray1}"/>
+                                    <Setter Property="BorderBrush" Value="{x:Null}"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="DataGridCell.IsSelected" Value="True">
+                                            <Setter Property="Background" Value="{StaticResource Blue}"/>
+                                            <Setter Property="BorderBrush" Value="{x:Null}"/>
+                                            <Setter Property="Foreground" Value="White"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGrid.CellStyle>
+                            <DataGrid.Items>
+                                <local:Question Number="1" Correctly_Answered="97"/>
+                                <local:Question Number="2" Correctly_Answered="91"/>
+                                <local:Question Number="3" Correctly_Answered="82"/>
+                                <local:Question Number="4" Correctly_Answered="64"/>
+                                <local:Question Number="5" Correctly_Answered="86"/>
+                                <local:Question Number="6" Correctly_Answered="78"/>
+                                <local:Question Number="7" Correctly_Answered="53"/>
+                                <local:Question Number="8" Correctly_Answered="99"/>
+                                <local:Question Number="9" Correctly_Answered="100"/>
+                                <local:Question Number="10" Correctly_Answered="80"/>
+                                <local:Question Number="11" Correctly_Answered="47"/>
+                            </DataGrid.Items>
+                        </DataGrid>
+                    </Grid>
+
+                </Grid>
+
+                <!--Footer-->
+                <WrapPanel Grid.Row="4"
+                       HorizontalAlignment="Right" 
+                       VerticalAlignment="Center">
+                    <Button Content="Export"
+                        Style="{StaticResource FlatBlueBtn}"
+                        Margin="5,0"/>
+
+                    <Button Content="Print" 
+                        Style="{StaticResource FlatBlueBtn}" 
+                        Margin="5,0"/>
+
+                    <Button Content="Apply Curve" 
+                        Style="{StaticResource FlatBlueBtn}" 
+                        Margin="5,0"/>
+
+                    <Button Content="Finish" 
+                        Style="{StaticResource FlatBlueBtn}" 
+                        Margin="5,0"/>
+                </WrapPanel>
+
+            </Grid>
+        </Grid>
+
+        <!--Curve Grid-->
+        <Grid Name="TestCurve_Grid" 
+              Visibility="{Binding ElementName=TestCurve_RB, Path=IsChecked, Converter={StaticResource BoolToVis}}"
+              Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition/>
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
+            
+            
+            <!--Instruction-->
+            <local:InstructionsUIHelper Label="Curve"/>
+
+            <!--Curve Grid-->
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                
+                <!--Curve Types-->
+                <StackPanel Grid.Column="0" Background="{StaticResource LightGray2}">
+                    <RadioButton Name="FullCreditCurve_RB" ContentStringFormat="Full-Credit Curve"      Style="{StaticResource GrayTabToggle}"/>
+                    <RadioButton Name="FlatCurve_RB" ContentStringFormat="Flat"                         Style="{StaticResource GrayTabToggle}"/>
+                    <RadioButton Name="BellCurve_RB" ContentStringFormat="Bell Curve"                   Style="{StaticResource GrayTabToggle}"/>
+                </StackPanel>
+                
+                <!--Curve Specific Properties-->
+                <Grid Grid.Column="1" VerticalAlignment="Top">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+
+                    <!--Overall Statistics-->
+                    <Border CornerRadius="5"
+                            Margin="10,0"
+                            Background="{StaticResource LightGray2}">
+
+                        <Grid HorizontalAlignment="Center">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition MaxWidth="150"/>
+                                <ColumnDefinition MaxWidth="150"/>
+                                <ColumnDefinition MaxWidth="150"/>
+                            </Grid.ColumnDefinitions>
+
+                            <local:InstructionsUIHelper Label="Overall Statistics"
+                                                        Grid.ColumnSpan="100"/>
+
+                            <!--Highest Score-->
+                            <local:CircleProgressBar Value="100"
+                                                     Grid.Row="1"
+                                                 StrokeColor="{StaticResource FlatGreen}"
+                                                 Foreground="{StaticResource DarkGray1}"
+                                                 Label="Highest Score"/>
+
+                            <!--Average Score-->
+                            <local:CircleProgressBar Value="75"
+                                                     Grid.Row="1"
+                                                 StrokeColor="{StaticResource FlatYellow}"
+                                                 Foreground="{StaticResource DarkGray1}"
+                                                 Label="Average Score"
+                                                 Grid.Column="1"/>
+
+                            <!--Lowest Score-->
+                            <local:CircleProgressBar Value="60"
+                                                     Grid.Row="1"
+                                                 StrokeColor="{StaticResource FlatRed}"
+                                                 Foreground="{StaticResource DarkGray1}"
+                                                 Label="Average Score"
+                                                 Grid.Column="2"/>
+                        </Grid>
+
+                    </Border>
+
+                    <!--Curve Description-->
+                    <Border CornerRadius="5" Margin="10"
+                            Grid.Row="1"
+                            Background="{StaticResource LightGray2}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+
+                            <!--Instructions-->
+                            <local:InstructionsUIHelper Label="Curve Description"/>
+
+                            <!--Full-Credit Curve Description-->
+                            <TextBlock Text="All students will receive a flat curve of the amount of points it takes to give the highest scoring student a perfect score."
+                                       TextWrapping="Wrap"
+                                       Visibility="{Binding ElementName=FullCreditCurve_RB, Path=IsChecked, Converter={StaticResource BoolToVis}}"
+                                       TextAlignment="Center"
+                                       Margin="10"
+                                       Grid.Row="1"/>
+                            <!--Flat Curve Description-->
+                            <TextBlock Text="All students will receive the same variable amount of points."                                       
+                                       Visibility="{Binding ElementName=FlatCurve_RB, Path=IsChecked, Converter={StaticResource BoolToVis}}"
+                                       TextAlignment="Center"
+                                       Margin="10"
+                                       Grid.Row="1"/>
+
+                            <!--Bell Curve Description-->
+                            <TextBlock Text="Bell Curve Description"
+                                       Visibility="{Binding ElementName=BellCurve_RB, Path=IsChecked, Converter={StaticResource BoolToVis}}"
+                                       TextAlignment="Center"
+                                       Margin="10"
+                                       Grid.Row="1"/>
+                        </Grid>
+
+                    </Border>
+
+                    <!--Curve Specific Properties-->
+                    <Border CornerRadius="5"
+                            Margin="10"
+                            Background="{StaticResource LightGray2}"
+                            Grid.Row="2">
+
+                        <!--Flat Curve Properties-->
+                        <Grid Visibility="{Binding ElementName=FlatCurve_RB, Path=IsChecked, Converter={StaticResource BoolToVis}}">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="50"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+
+                            <!--Instruction-->
+                            <local:InstructionsUIHelper Label="Adjust Curve"/>
+
+                            <Slider x:Name="AdjustCurve_Slider"
+                                    Grid.Row="1" 
+                                    Style="{StaticResource SliderStyle}"
+                                    Maximum="100"
+                                    MaxWidth="600"
+                                    VerticalAlignment="Center"/>
+
+                            <TextBlock Text="{Binding ElementName=AdjustCurve_Slider, Path=Value, StringFormat={}{0:#,0#.0} Pts}"
+                                       Grid.Row="2"
+                                       Foreground="{StaticResource DarkGray3}"
+                                       HorizontalAlignment="Center"/>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Grid>
+
+            <!--Footer-->
+            <WrapPanel Grid.Row="2"
+                       HorizontalAlignment="Right" 
+                       VerticalAlignment="Center">
+                <Button Content="Cancel"
+                        Style="{StaticResource FlatBlueOutlineBtn}"
+                        Margin="5,0"/>
+
+                <Button Content="Reset" 
+                        Style="{StaticResource FlatBlueBtn}" 
+                        Margin="5,0"/>
+
+                <Button Content="Apply" 
+                        Style="{StaticResource FlatBlueBtn}" 
+                        Margin="5,0"/>
+            </WrapPanel>
+
+        </Grid>
+        
+        <!--Print Grid-->
+        <Grid Name="PrintAnswers_Grid"
+              Visibility="{Binding ElementName=PrintAnswers_RB, Path=IsChecked, Converter={StaticResource BoolToVis}}"
+              Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition/>
+                <RowDefinition Height="100"/>
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
+
+            
+            <!--Instructions-->
+            <local:InstructionsUIHelper Label="Print"/>
+            <TextBlock Text="Select the students and questions you would like to print."
+                       TextAlignment="Center"
+                       VerticalAlignment="Center"
+                       Grid.Row="1"
+                       Foreground="{StaticResource DarkGray2}"/>
+
+            <!--Student and Question Selectors-->
+            <Border CornerRadius="5"
+                    Margin="10"
+                    Background="{StaticResource LightGray2}"
+                    Grid.Row="2">
+
+                <Grid HorizontalAlignment="Center" VerticalAlignment="Top">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition Height="40"/>
+                    </Grid.RowDefinitions>
+
+                    <!--Student Selector-->
+                    <Grid Grid.Column="0"
+                          Margin="15">
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="40"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        
+                        <!--Instructions-->
+                        <local:InstructionsUIHelper Label="Students"
+                                                    Foreground="{StaticResource DarkGray2}"/>
+
+                        <!--Students-->
+                        <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                                      VerticalScrollBarVisibility="Auto"
+                                      Grid.Row="1">
+                            <ListBox Background="Transparent" 
+                                             BorderBrush="{x:Null}"
+                                             ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                                <ListBox.Items>
+                                    <local:Student Name="Student #1"/>
+                                    <local:Student Name="Student #2"/>
+                                    <local:Student Name="Student #3"/>
+                                    <local:Student Name="Student #4"/>
+                                    <local:Student Name="Student #5"/>
+                                    <local:Student Name="Student #6"/>
+                                    <local:Student Name="Student #7"/>
+                                    <local:Student Name="Student #8"/>
+                                    <local:Student Name="Student #9"/>
+                                    <local:Student Name="Student #10"/>
+                                    <local:Student Name="Student #11"/>
+                                    <local:Student Name="Student #12"/>
+                                    <local:Student Name="Student #13"/>
+                                    <local:Student Name="Student #14"/>
+                                    <local:Student Name="Student #15"/>
+                                    <local:Student Name="Student #16"/>
+                                    <local:Student Name="Student #17"/>
+                                    <local:Student Name="Student #18"/>
+                                    <local:Student Name="Student #19"/>
+                                    <local:Student Name="Student #20"/>
+                                </ListBox.Items>
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate DataType="{x:Type local:Student}">
+                                        <ToggleButton x:Name="mainTggleBtn" Background="Transparent" BorderBrush="Transparent">
+                                            <ToggleButton.Style>
+                                                <Style TargetType="ToggleButton">
+                                                    <Setter Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate TargetType="ToggleButton">
+                                                                <ContentPresenter/>
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </ToggleButton.Style>
+                                            <DockPanel>
+                                                <Border VerticalAlignment="Center" 
+                                                    CornerRadius="5" 
+                                                    Margin="3"
+                                                    Height="30"
+                                                    Background="{StaticResource LightGray3}" 
+                                                    Width="260">
+                                                    <DockPanel>
+                                                        <TextBlock Text="{Binding Name}"
+                                                               VerticalAlignment="Center"
+                                                               Foreground="{StaticResource DarkGray3}"
+                                                               Margin="10,0,0,0"/>
+                                                        <Ellipse Stroke="{StaticResource FlatBlue}" 
+                                                             StrokeThickness="1"
+                                                             HorizontalAlignment="Right"
+                                                             Height="20" 
+                                                             Margin="0,0,10,0"
+                                                             Width="20">
+                                                            <Ellipse.Style>
+                                                                <Style TargetType="{x:Type Ellipse}">
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ToggleButton}, Path=IsChecked}" Value="True">
+                                                                            <Setter Property="Fill" Value="{StaticResource FlatBlue}"/>
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </Ellipse.Style>
+                                                        </Ellipse>
+                                                    </DockPanel>
+                                                </Border>
+                                            </DockPanel>
+                                        </ToggleButton>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                                <ListBox.ItemContainerStyle>
+                                    <!--This style eliminates any background colors-->
+                                    <Style TargetType="ListBoxItem">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="ListBoxItem">
+                                                    <ContentPresenter/>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </ListBox.ItemContainerStyle>
+                            </ListBox>
+                        </ScrollViewer>
+                    </Grid>
+
+                    <!--Question Selector-->
+                    <Grid Grid.Column="1"
+                          Margin="15">
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="40"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        
+                        <!--Instructions-->
+                        <local:InstructionsUIHelper Label="Questions"
+                                                    Foreground="{StaticResource DarkGray2}"/>
+
+                        <!--Questions-->
+                        <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                                      VerticalScrollBarVisibility="Auto"
+                                      Grid.Row="1">
+
+                            <ListBox Background="Transparent" 
+                                             BorderBrush="{x:Null}"
+                                             ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                                <ListBox.Items>
+                                    <local:Question Number="1"/>
+                                    <local:Question Number="2"/>
+                                    <local:Question Number="3"/>
+                                    <local:Question Number="4"/>
+                                    <local:Question Number="5"/>
+                                    <local:Question Number="6"/>
+                                    <local:Question Number="7"/>
+                                    <local:Question Number="8"/>
+                                    <local:Question Number="9"/>
+                                    <local:Question Number="10"/>
+                                    <local:Question Number="11"/>
+                                    <local:Question Number="12"/>
+                                    <local:Question Number="13"/>
+                                    <local:Question Number="14"/>
+                                    <local:Question Number="15"/>
+                                    <local:Question Number="16"/>
+                                    <local:Question Number="17"/>
+                                </ListBox.Items>
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate DataType="{x:Type local:Student}">
+                                        <ToggleButton x:Name="mainTggleBtn" Background="Transparent" BorderBrush="Transparent">
+                                            <ToggleButton.Style>
+                                                <Style TargetType="ToggleButton">
+                                                    <Setter Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate TargetType="ToggleButton">
+                                                                <ContentPresenter/>
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </ToggleButton.Style>
+                                            <DockPanel>
+                                                <Border VerticalAlignment="Center" 
+                                                    CornerRadius="5" 
+                                                    Margin="3"
+                                                    Height="30"
+                                                    Background="{StaticResource LightGray3}" 
+                                                    Width="260">
+                                                    <DockPanel>
+                                                        <TextBlock Text="{Binding Number, StringFormat={}Question #{0}}"
+                                                               VerticalAlignment="Center"
+                                                               Foreground="{StaticResource DarkGray3}"
+                                                               Margin="10,0,0,0"/>
+                                                        <Ellipse Stroke="{StaticResource FlatBlue}" 
+                                                             StrokeThickness="1"
+                                                             HorizontalAlignment="Right"
+                                                             Height="20" 
+                                                             Margin="0,0,10,0"
+                                                             Width="20">
+                                                            <Ellipse.Style>
+                                                                <Style TargetType="{x:Type Ellipse}">
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ToggleButton}, Path=IsChecked}" Value="True">
+                                                                            <Setter Property="Fill" Value="{StaticResource FlatBlue}"/>
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </Ellipse.Style>
+                                                        </Ellipse>
+                                                    </DockPanel>
+                                                </Border>
+                                            </DockPanel>
+                                        </ToggleButton>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                                <ListBox.ItemContainerStyle>
+                                    <!--This style eliminates any background colors-->
+                                    <Style TargetType="ListBoxItem">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="ListBoxItem">
+                                                    <ContentPresenter/>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </ListBox.ItemContainerStyle>
+                            </ListBox>
+                        </ScrollViewer>
+                        
+                    </Grid>
+                    
+                    
+
+                    
+                    <!--Select All Buttons-->
+                    <Button Content="Select All"
+                            Style="{StaticResource FlatBlueBtn}"
+                            Grid.Row="1"/>
+                    <Button Content="Select All"
+                            Style="{StaticResource FlatBlueBtn}"
+                            Grid.Row="1"
+                            Grid.Column="1"/>
+                    
+                </Grid>
+
+            </Border>
+
+            
+            <!--Print Properties-->
+            <Border CornerRadius="5"
+                    Background="{StaticResource LightGray2}"
+                    Grid.Row="3"
+                    Margin="10">
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <!--Print Correct Answers-->
+                    <Label Content="Print Correct Answers"
+                       Foreground="{StaticResource DarkGray2}"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Right"
+                       Margin="0,0,20,0"/>
+                    <local:OnOffSwitch Grid.Column="1"/>
+
+                    <!--Print Questions-->
+                    <Label Content="Print Questions"
+                       Foreground="{StaticResource DarkGray2}"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Right"
+                       Grid.Row="1"
+                       Margin="0,0,20,0"/>
+                    <local:OnOffSwitch Grid.Column="1"
+                                   Grid.Row="1"/>
+
+                </Grid>
+                
+            </Border>
+
+            
+            
+            <!--Footer-->
+            <WrapPanel Grid.Row="4"
+                       HorizontalAlignment="Right" 
+                       VerticalAlignment="Center">
+                <Button Content="Cancel"
+                        Style="{StaticResource FlatBlueOutlineBtn}"
+                        Margin="5,0"/>
+
+                <Button Content="Save as PDF" 
+                        Style="{StaticResource FlatBlueBtn}" 
+                        Margin="5,0"/>
+            </WrapPanel>
+
+        </Grid>
+        
+        <!--Export To Grid-->
+        <Grid Name="ExportTo_Grid"              
+              Visibility="{Binding ElementName=ExportTo_Rb, Path=IsChecked, Converter={StaticResource BoolToVis}}"
+              Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition/>
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
+            
+            <!--Instructions-->
+            <local:InstructionsUIHelper Label="Export Student Grades"
+                                        Foreground="{StaticResource DarkGray2}"/>
+            
+            <!--Search Bar-->
+            <local:TextBoxCustom Placeholder="Search"
+                                 Grid.Row="1"
+                                 MaxWidth="350"
+                                 Margin="20,0"
+                                 AllowOnly="Integer_Negative"
+                                 Height="30"/>
+            
+            <!--Search Results-->
+            <Border Grid.Row="2"
+                    CornerRadius="5"
+                    Background="{StaticResource LightGray3}"
+                    Margin="20">
+                <!--Listbox here with image and exportTo name-->
+            </Border>
+            
+            
+            
+            <!--Footer-->
+            <WrapPanel Grid.Row="3"
+                       HorizontalAlignment="Right" 
+                       VerticalAlignment="Center">
+                <Button Content="Back"
+                        Style="{StaticResource FlatBlueOutlineBtn}"
+                        Margin="5,0"/>
+
+                <Button Content="Export" 
+                        Style="{StaticResource FlatBlueBtn}" 
+                        Margin="5,0"/>
+            </WrapPanel>
+        </Grid>
+        
+    </Grid>
+</UserControl>

@@ -1,0 +1,13 @@
+﻿<UserControl x:Class="AceGrading.InstructionsUIHelper"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AceGrading"
+             mc:Ignorable="d" 
+             x:Name="Instructions">
+    <StackPanel VerticalAlignment="Center" DataContext="{Binding ElementName=Instructions}">
+        <TextBlock Text="{Binding Label}" Foreground="{DynamicResource DarkGray2}" TextAlignment="Center" Padding="4"/>
+        <Rectangle Height="2" Fill="{DynamicResource Gray2}" Margin="50,0,50,0"/>
+    </StackPanel>
+</UserControl>

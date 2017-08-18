@@ -1,0 +1,174 @@
+﻿<UserControl x:Class="AceGrading.StudentItem"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AceGrading"
+             mc:Ignorable="d" 
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             d:DesignHeight="200" d:DesignWidth="200">
+    <UserControl.Resources>
+        <sys:Double x:Key="StudentItemWidth">100</sys:Double>
+    </UserControl.Resources>
+    <Grid>
+        <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Bottom">
+            <RadioButton Name="Name_RdBtn" Content="Name" IsChecked="False"/>
+            <RadioButton Name="Wifi_RdBtn" Content="Wifi" IsChecked="False"/>
+            <RadioButton Name="Cheating_RdBtn" Content="Cheating" IsChecked="True"/>
+            <RadioButton Name="Login_RdBtn" Content="LoginKey" IsChecked="False"/>
+        </WrapPanel>
+
+        <!--Student Progress-->
+        <local:CircleProgressBar Value="97"
+                                 StrokeThickness="500"
+                                 StrokeColor="{StaticResource FlatGreen}" 
+                                 Foreground="{StaticResource DarkGray1}" 
+                                 Width="150"
+                                 Margin="0,20,0,0"
+                                 VerticalAlignment="Center"/>
+
+        <Ellipse Height="{StaticResource StudentItemWidth}" 
+                 Width="{StaticResource StudentItemWidth}" 
+                 Fill="{StaticResource LightGray3}"
+                 Visibility="{Binding ElementName=Cheating_RdBtn, Path=IsChecked, Converter={StaticResource BoolToVis}}"/>
+
+        <Ellipse Height="175" 
+                 Width="175" 
+                 Fill="{StaticResource LightGray3}"
+                 Visibility="{Binding ElementName=Cheating_RdBtn, Path=IsChecked, Converter={StaticResource InverseBoolToVis}}"/>
+
+        <!--Student Name-->
+        <Grid Visibility="{Binding ElementName=Name_RdBtn, Path=IsChecked, Converter={StaticResource BoolToVis}}">
+            <TextBlock Text="Mary Margaret Herring"
+                       MaxWidth="{StaticResource StudentItemWidth}"
+                       MaxHeight="{StaticResource StudentItemWidth}"
+                       Margin="10"
+                       TextWrapping="Wrap"
+                       TextAlignment="Center"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
+                       Foreground="{StaticResource DarkGray3}"/>
+        </Grid>
+
+        <!--Wifi Grid-->
+        <Grid Visibility="{Binding ElementName=Wifi_RdBtn, Path=IsChecked, Converter={StaticResource BoolToVis}}"
+              HorizontalAlignment="Center" 
+              VerticalAlignment="Center"
+              Width="{StaticResource StudentItemWidth}"
+              Margin="0,0,0,15">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <!--Wifi Image-->
+            <!--Remove the default Source property when binding-->
+            <Image Source="/Icons/wifi_good.png">
+                <Image.Style>
+                    <Style TargetType="Image">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding WifiUsage}" Value="Using">
+                                <Setter Property="Source" Value="/Icons/wifi_bad.png"/>
+                                <Setter Property="ToolTip" Value="Using Internet!"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding WifiUsage}"  Value="Abstaining">
+                                <Setter Property="Source" Value="/Icons/wifi_good.png"/>
+                                <Setter Property="ToolTip" Value="All Good!"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Image.Style>
+            </Image>
+
+            <!--Wifi Message-->
+            <!--Remove the default Text property when binding-->
+            <TextBlock Text="All Good!"
+                       Grid.Row="1"
+                       Margin="5,0,5,0"
+                       Foreground="{StaticResource DarkGray2}"
+                       HorizontalAlignment="Center"
+                       TextAlignment="Center"
+                       TextWrapping="Wrap">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding WifiUsage}" Value="Using">
+                                <Setter Property="Text" Value="Using Internet!"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding WifiUsage}" Value="Abstaining">
+                                <Setter Property="Text" Value="All Good!"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+        </Grid>
+
+        <!--Cheating Grid-->
+        <Grid Visibility="{Binding ElementName=Cheating_RdBtn, Path=IsChecked, Converter={StaticResource BoolToVis}}" HorizontalAlignment="Center">
+            <Grid.Resources>
+                <sys:Double x:Key="lineWidth">2</sys:Double>
+            </Grid.Resources>
+            
+            <!--Cheating Lines-->
+            <Grid>
+                <!--Left, Top-->
+                <Line Stroke="{StaticResource FlatBlue}" X1="0" Y1="0" X2="55" Y2="55" StrokeThickness="{StaticResource lineWidth}"/>
+
+                <!--Left, Middle-->
+                <Line Stroke="{StaticResource FlatBlue}" X1="0" Y1="100" X2="40" Y2="100" StrokeThickness="{StaticResource lineWidth}"/>
+
+                <!--Left, Bottom -->
+                <Line Stroke="{StaticResource FlatBlue}" X1="0" Y1="200" X2="55" Y2="145" StrokeThickness="{StaticResource lineWidth}"/>
+
+                <!--Center, Bottom-->
+                <Line Stroke="{StaticResource FlatBlue}" X1="100" Y1="200" X2="100" Y2="163" StrokeThickness="{StaticResource lineWidth}"/>
+
+                <!--Center, Top-->
+                <Line Stroke="{StaticResource FlatBlue}" X1="100" Y1="37" X2="100" Y2="0" StrokeThickness="{StaticResource lineWidth}"/>
+
+                <!--Right, Top-->
+                <Line Stroke="{StaticResource FlatBlue}" X1="145" Y1="55" X2="200" Y2="0" StrokeThickness="{StaticResource lineWidth}"/>
+
+                <!--Right, Middle-->
+                <Line Stroke="{StaticResource FlatBlue}" X1="200" Y1="100" X2="160" Y2="100" StrokeThickness="{StaticResource lineWidth}"/>
+
+                <!--Right, Bottom-->
+                <Line Stroke="{StaticResource FlatBlue}" X1="200" Y1="200" X2="145" Y2="145" StrokeThickness="{StaticResource lineWidth}"/>
+
+            </Grid>
+            
+            <!--Cheating Percentages-->
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="30"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="30"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="30"/>
+                </Grid.ColumnDefinitions>
+                
+                <!--Left, Top-->
+                <TextBlock Text="{Binding Number, StringFormat={}{0}%, FallbackValue=50%}" 
+                           Grid.Row="0" Grid.Column="1"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Left"
+                           Foreground="{StaticResource FlatBlue}"/>
+
+                <!--Left, Middle-->
+                <TextBlock Text="{Binding Number, StringFormat={}{0}%, FallbackValue=50%}" 
+                           Grid.Row="1" Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Margin="0,0,0,20"
+                           HorizontalAlignment="Right"
+                           Foreground="{StaticResource FlatBlue}"/>
+
+            </Grid>
+
+        </Grid>
+    </Grid>
+</UserControl>

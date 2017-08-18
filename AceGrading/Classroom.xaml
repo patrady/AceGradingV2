@@ -1,0 +1,151 @@
+﻿<UserControl x:Class="AceGrading.Classroom"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:local="clr-namespace:AceGrading"
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="900"
+             FontFamily="{StaticResource Font}">
+    <Border CornerRadius="5"
+            Background="{StaticResource LightGray3}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="180"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <!--Left Panel Grid-->
+            <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                          VerticalScrollBarVisibility="Auto">
+                <Border CornerRadius="5"
+                    Margin="5"
+                    Background="{StaticResource LightGray2}">
+
+                    <Grid VerticalAlignment="Center">
+                        <Grid.Resources>
+                            <GridLength x:Key="sepLength">10</GridLength>
+                        </Grid.Resources>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="120"/>
+                            <RowDefinition Height="100"/>
+                            <RowDefinition Height="100"/>
+                            <RowDefinition Height="120"/>
+                            <RowDefinition Height="120"/>
+                        </Grid.RowDefinitions>
+
+                        <!--New Student Image-->
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="{StaticResource sepLength}"/>
+                            </Grid.RowDefinitions>
+
+                            <Image Source="/Icons/student.png"/>
+                            <TextBlock Text="New Student"
+                                   Grid.Row="1"
+                                   Foreground="{StaticResource DarkGray2}"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"/>
+                            
+                            <Separator Grid.Row="2"
+                                   Margin="5,0"
+                                   VerticalAlignment="Bottom"
+                                   BorderBrush="{StaticResource Gray3}"/>
+                        </Grid>
+
+                        <!--Students to Place-->
+                        <Grid Grid.Row="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition Height="{StaticResource sepLength}"/>
+                            </Grid.RowDefinitions>
+                            <local:LargeNumber Number="12"
+                                       Label="Students to Place"
+                                       LabelPosition="Right"
+                                       LabelWidth="70"
+                                       Size="Medium"/>
+                            <Separator Margin="5"
+                                   BorderBrush="{StaticResource Gray3}"
+                                   VerticalAlignment="Bottom"/>
+                        </Grid>
+
+                        <!--Arrangements-->
+                        <Grid Grid.Row="2">
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition Height="{StaticResource sepLength}"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Text="Arrangements"
+                                   Foreground="{StaticResource DarkGray2}"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"/>
+
+                            <Button Content="Random"
+                                Style="{StaticResource BlueTextBtn}"
+                                Grid.Row="1"/>
+
+                            <Button Content="Alphabetical"
+                                Style="{StaticResource BlueTextBtn}"
+                                Grid.Row="2"/>
+
+                            <Separator Grid.Row="3"
+                                   BorderBrush="{StaticResource Gray3}"
+                                   VerticalAlignment="Bottom"
+                                       Margin="5,0"/>
+                        </Grid>
+
+                        <!--Number of Columns-->
+                        <local:NumberCarousel x:Name="NumColumns"
+                                              Number="00"
+                                              Label="Columns"
+                                              Grid.Row="3"
+                                              Size="Small"
+                                              VerticalAlignment="Center"
+                                              HorizontalAlignment="Center"/>
+
+                        <!--Number of Columns-->
+                        <local:NumberCarousel x:Name="NumRows" 
+                                              Number="00"
+                                              Grid.Row="4"
+                                              Size="Small"
+                                              Label="Rows        "
+                                              VerticalAlignment="Center"
+                                              HorizontalAlignment="Center"/>
+
+                    </Grid>
+                </Border>
+            </ScrollViewer>
+
+            <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                          VerticalScrollBarVisibility="Auto"
+                          Grid.Column="1">
+                <ItemsControl ItemsSource="{Binding SelectedClass.ClassLayout.Desks}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Grid local:GridHelpers.ColumnCount="{Binding SelectedClass.ClassLayout.NumColumns, FallbackValue=11}"
+                                  local:GridHelpers.RowCount="{Binding SelectedClass.ClassLayout.NumRows, FallbackValue=11}">
+                            </Grid>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemContainerStyle>
+                        <Style>
+                            <Setter Property="Grid.Row" Value="{Binding RowIndex}"/>
+                            <Setter Property="Grid.Column" Value="{Binding ColumnIndex}"/>
+                        </Style>
+                    </ItemsControl.ItemContainerStyle>
+                    <ItemsControl.Resources>
+                    </ItemsControl.Resources>
+                </ItemsControl>
+            </ScrollViewer>
+
+
+        </Grid>
+    </Border>
+
+</UserControl>

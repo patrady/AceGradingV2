@@ -34,6 +34,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="LiveCharts, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
+      <HintPath>..\packages\LiveCharts.0.9.7\lib\net40\LiveCharts.dll</HintPath>
+    </Reference>
+    <Reference Include="LiveCharts.Wpf, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
+      <HintPath>..\packages\LiveCharts.Wpf.0.9.7\lib\net40\LiveCharts.Wpf.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -55,56 +61,157 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="CircularProgressBar\CircProgBar.cs" />
-    <Compile Include="ClassroomLayout.xaml.cs">
-      <DependentUpon>ClassroomLayout.xaml</DependentUpon>
+    <Compile Include="Classroom.xaml.cs">
+      <DependentUpon>Classroom.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Enumerations\Enums.cs" />
-    <Compile Include="NewPlaceHolder.xaml.cs">
-      <DependentUpon>NewPlaceHolder.xaml</DependentUpon>
+    <Compile Include="Controls\CircleProgressBar.xaml.cs">
+      <DependentUpon>CircleProgressBar.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TestObj\ClassStructure.cs" />
-    <Compile Include="TestObj\Test.cs" />
-    <Compile Include="Initials.cs" />
-    <Compile Include="Question\Essay.cs" />
-    <Compile Include="Question\Matching.cs" />
-    <Compile Include="Question\MultipleChoice.cs" />
-    <Compile Include="Question\Question.cs" />
-    <Compile Include="Question\ShortAnswer.cs" />
-    <Compile Include="Question\TrueFalse.cs" />
-    <Compile Include="RosterManagement.xaml.cs">
+    <Compile Include="Controls\CircProgBar.cs" />
+    <Compile Include="Controls\LetterSelector.xaml.cs">
+      <DependentUpon>LetterSelector.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TestResults.xaml.cs">
+      <DependentUpon>TestResults.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\GradeTest.xaml.cs">
+      <DependentUpon>GradeTest.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Letter.cs" />
+    <Compile Include="Models\LetterContainer.cs" />
+    <Compile Include="Models\PropertyChanged.cs" />
+    <Compile Include="NavigationItem.xaml.cs">
+      <DependentUpon>NavigationItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\NumberCarousel.xaml.cs">
+      <DependentUpon>NumberCarousel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Switch.xaml.cs">
+      <DependentUpon>Switch.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\OnOffSwitch.xaml.cs">
+      <DependentUpon>OnOffSwitch.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="StudentItem.xaml.cs">
+      <DependentUpon>StudentItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\StartTest.xaml.cs">
+      <DependentUpon>StartTest.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\Converters\BooleanToCollapseConverter.cs" />
+    <Compile Include="ViewModels\Converters\EmptyTextToVisConverter.cs" />
+    <Compile Include="ViewModels\Converters\EnumToBooleanConverter.cs" />
+    <Compile Include="ViewModels\Converters\InverseBoolean.cs" />
+    <Compile Include="ViewModels\Converters\InverseBooleanToCollapseConverter.cs" />
+    <Compile Include="ViewModels\Converters\BooleanConverter.cs" />
+    <Compile Include="ViewModels\Converters\InverseBooleanToVisibilityConverter.cs" />
+    <Compile Include="Controls\CircleInitials.xaml.cs">
+      <DependentUpon>CircleInitials.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ConfirmationWindow.xaml.cs">
+      <DependentUpon>ConfirmationWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Enums.cs" />
+    <Compile Include="Controls\InstructionsUIHelper.xaml.cs">
+      <DependentUpon>InstructionsUIHelper.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\NumberHeader.xaml.cs">
+      <DependentUpon>NumberHeader.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ClassStructure.cs" />
+    <Compile Include="Models\Test.cs" />
+    <Compile Include="Models\Initials.cs" />
+    <Compile Include="Models\Essay.cs" />
+    <Compile Include="Models\Matching.cs" />
+    <Compile Include="Models\MultipleChoice.cs" />
+    <Compile Include="Models\Question.cs" />
+    <Compile Include="Models\ShortAnswer.cs" />
+    <Compile Include="Models\TrueFalse.cs" />
+    <Compile Include="Views\RosterManagement.xaml.cs">
       <DependentUpon>RosterManagement.xaml</DependentUpon>
     </Compile>
-    <Compile Include="StudentAnswers\Student_Answer.cs" />
-    <Compile Include="StudentAnswers\Student_Essay.cs" />
-    <Compile Include="StudentAnswers\Student_Matching.cs" />
-    <Compile Include="StudentAnswers\Student_MultipleChoice.cs" />
-    <Compile Include="StudentAnswers\Student_ShortAnswer.cs" />
-    <Compile Include="StudentAnswers\Student_TrueFalse.cs" />
-    <Compile Include="TestAnswers.xaml.cs">
-      <DependentUpon>TestAnswers.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="TestManagement.xaml.cs">
+    <Compile Include="Models\Student_Answer.cs" />
+    <Compile Include="Models\Student_Essay.cs" />
+    <Compile Include="Models\Student_Matching.cs" />
+    <Compile Include="Models\Student_MultipleChoice.cs" />
+    <Compile Include="Models\Student_ShortAnswer.cs" />
+    <Compile Include="Models\Student_TrueFalse.cs" />
+    <Compile Include="Views\TestManagement.xaml.cs">
       <DependentUpon>TestManagement.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TestObj\Section.cs" />
-    <Compile Include="TestObj\Test_Statistics.cs" />
-    <Compile Include="TestTakingManagement.xaml.cs">
-      <DependentUpon>TestTakingManagement.xaml</DependentUpon>
+    <Compile Include="Models\Section.cs" />
+    <Compile Include="Models\Test_Statistics.cs" />
+    <Compile Include="Models\WordBox.cs" />
+    <Compile Include="Controls\TextBoxCustom.xaml.cs">
+      <DependentUpon>TextBoxCustom.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TimePicker.xaml.cs">
+    <Compile Include="Controls\TextBoxWithTextBlockCustomUIHelper.xaml.cs">
+      <DependentUpon>TextBoxWithTextBlockCustomUIHelper.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\TimePicker.xaml.cs">
       <DependentUpon>TimePicker.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\ClassViewModel.cs" />
     <Compile Include="ViewModels\Commands\ViewModelCommands.cs" />
-    <Compile Include="ViewModels\Converters\InverseBooleanToVisibility.cs" />
     <Compile Include="ViewModels\Validations\Validations.cs" />
-    <Compile Include="ViewModels\ViewClasses.cs" />
-    <Page Include="ClassroomLayout.xaml">
+    <Compile Include="Controls\GridHelpers.cs" />
+    <Page Include="Classroom.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainWindow.xaml">
+    <Page Include="Controls\CircleProgressBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\LetterSelector.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TestResults.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\GradeTest.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="NavigationItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\NumberCarousel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Switch.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\OnOffSwitch.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\CircleInitials.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ConfirmationWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\InstructionsUIHelper.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="StudentItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\StartTest.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -112,31 +219,31 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="NewPlaceHolder.xaml">
+    <Page Include="Controls\NumberHeader.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="RosterManagement.xaml">
+    <Page Include="Views\RosterManagement.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="TestAnswers.xaml">
+    <Page Include="Views\TestManagement.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="TestManagement.xaml">
+    <Page Include="Controls\TextBoxCustom.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="TestTakingManagement.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="Controls\TextBoxWithTextBlockCustomUIHelper.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
-    <Page Include="TimePicker.xaml">
+    <Page Include="Controls\TimePicker.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -159,6 +266,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -166,11 +274,11 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Icons\Checkmark.png" />
     <Resource Include="Icons\LoginKey.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Icons\cheating_alert.png" />
-    <Resource Include="Icons\Checkmark.png" />
     <Resource Include="Icons\EditProfile.png" />
     <Resource Include="Icons\HamburgerMenu.png" />
     <Resource Include="Icons\Test.png" />
@@ -180,6 +288,26 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Icons\wifi_disconnected.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\warning.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\exclamation_point.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\student.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\AlignCenter.png" />
+    <Resource Include="Icons\AlignLeft.png" />
+    <Resource Include="Icons\AlignRight.png" />
+    <Resource Include="Icons\Bold.png" />
+    <Resource Include="Icons\Italics.png" />
+    <Resource Include="Icons\Undo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\Underline.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

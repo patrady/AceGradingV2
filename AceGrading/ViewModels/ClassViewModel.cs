@@ -1,8 +1,13 @@
-﻿using System;
+﻿using LiveCharts;
+using LiveCharts.Defaults;
+using LiveCharts.Wpf;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows;
+using System.Windows.Media;
 
 namespace AceGrading
 {
@@ -14,21 +19,21 @@ namespace AceGrading
 
             Class class1 = new Class();
             class1.Class_Name = "Theology IV";
-            class1.Add_Student(new Student() { StudentName = "Robert Brady" });
-            class1.Add_Student(new Student() { StudentName = "Julie Brady" });
-            class1.Add_Student(new Student() { StudentName = "Kristen Duke" });
-            class1.Add_Student(new Student() { StudentName = "Joe Cloud" });
-            class1.Add_Student(new Student() { StudentName = "Nick Nocholi" });
+            class1.Add_Student(new Student() { Name = "Robert Brady" });
+            class1.Add_Student(new Student() { Name = "Julie Brady" });
+            class1.Add_Student(new Student() { Name = "Kristen Duke" });
+            class1.Add_Student(new Student() { Name = "Joe Cloud" });
+            class1.Add_Student(new Student() { Name = "Nick Nocholi" });
             class1.Add_Test(new Test() { TestName = "Test #1", Upload_File_Name = @"C:\Users\rober\Desktop\pingpong.png", Point_Worth = 100, Statistics = new Test_Statistics(), Is_Graded = true, HighestScore = 99, ParentClass = class1 });
             class1.Add_Test(new Test() { TestName = "Test #2", Upload_File_Name = @"C:\Users\rober\Desktop\Doc1.docx", Point_Worth = 200, Statistics = new Test_Statistics(), Is_Graded = true, HighestScore = 98, ParentClass = class1 });
 
             Class class2 = new Class();
             class2.Class_Name = "History / Geography";
-            class2.Add_Student(new Student() { StudentName = "Joseph Herring"});
-            class2.Add_Student(new Student() { StudentName = "Alberto Rudeo"});
-            class2.Add_Student(new Student() { StudentName = "Laura Cook"});
-            class2.Add_Student(new Student() { StudentName = "PJ Biyani"});
-            class2.Add_Student(new Student() { StudentName = "Kartik Gupta"});
+            class2.Add_Student(new Student() { Name = "Joseph Herring"});
+            class2.Add_Student(new Student() { Name = "Alberto Rudeo"});
+            class2.Add_Student(new Student() { Name = "Laura Cook"});
+            class2.Add_Student(new Student() { Name = "PJ Biyani"});
+            class2.Add_Student(new Student() { Name = "Kartik Gupta"});
             class2.Add_Test(new Test() { TestName = "Test #3", Statistics = new Test_Statistics(), Is_Graded = true, HighestScore = 97, ParentClass = class2 });
             class2.Add_Test(new Test() { TestName = "Test #4", Statistics = new Test_Statistics(), Is_Graded = true, HighestScore = 96, ParentClass = class2 });
 
@@ -40,7 +45,17 @@ namespace AceGrading
             NewClass = new Class();
             SelectedClass = this.Classes.ElementAt(0);
             SelectedClass.SelectedTest = SelectedClass.Tests.ElementAt(0);
+            this.AverageTestScore = 73.0;
+            this.TestsTaken = 5;
+            this.LastTestScore = 93.6;
+            this.ClassRank = 4;
         }
+
+        //Fake Data for the LiveCharts
+        public double AverageTestScore { get; set; }
+        public double TestsTaken { get; set; }
+        public double LastTestScore { get; set; }
+        public double ClassRank { get; set; }
 
         //Attributes
         public ObservableCollection<Class> Classes { get; set; }
@@ -148,7 +163,6 @@ namespace AceGrading
         public Student()
         {
             StudentInitials = new Initials();
-            this.StudentName = this.DefaultName;
             this.RowIndex = -1;
             this.ColumnIndex = -1;
             TestAnswers = new List<Student_Answer>();
@@ -156,7 +170,7 @@ namespace AceGrading
             DatabaseID = -1;
             LoginKey = 1234;
             this.Status = Online_Status.Offline;
-            this.WifiUsage = Wifi_Status.AbstainingWifi;
+            this.WifiUsage = Wifi_Status.Abstaining;
         }
 
         //Variables
@@ -182,7 +196,7 @@ namespace AceGrading
                     _WifiUsage = value;
 
                     //Update the WifiDetected Boolean
-                    if (_WifiUsage == Wifi_Status.UsingWifi)
+                    if (_WifiUsage == Wifi_Status.Using)
                         this.WifiDetected = true;
 
                     OnPropertyChanged("WifiUsage");
@@ -201,7 +215,7 @@ namespace AceGrading
                 }
             }
         }
-        public string StudentName
+        public string Name
         {
             get { return _Name; }
             set
@@ -210,7 +224,7 @@ namespace AceGrading
                 {
                     _Name = value;
                     _Initials = StudentInitials.MakeInitials(_Name);
-                    OnPropertyChanged("StudentName");
+                    OnPropertyChanged("Name");
                     OnPropertyChanged("Initials");
                 }
             }
@@ -478,20 +492,20 @@ namespace AceGrading
         public ReturnValidation Add_Student(Student student)
         {
             //Check if empty
-            if (student.StudentName == null || student.StudentName == "")
+            if (student.Name == null || student.Name == "")
                 return new ReturnValidation(_IsOk: false, _Header: "Add Student", _Body: "A student must receive a valid name.");
 
             //Check if the student name matches any other student names
             foreach (Student tempStudent in this.Students)
-                if (tempStudent.StudentName.ToLower() == student.StudentName.ToLower())
+                if (tempStudent.Name.ToLower() == student.Name.ToLower())
                     return new ReturnValidation(_IsOk: false, _Header: "Add Student", _Body: "A student by this name already exists, please choose another name.");
 
             //Add the student since no other student has the name
-            this.Students.Add(new Student() { StudentName = student.StudentName });
+            this.Students.Add(new Student() { Name = student.Name });
 
             //Create a list from the observable collection of students so it can be sorted alphabetically
             List<Student> LocalStudents = new List<Student>(this.Students);
-            LocalStudents.Sort((student1, student2) => string.Compare(student1.StudentName.Split(' ')[student1.StudentName.Split(' ').Length - 1], student2.StudentName.Split(' ')[student2.StudentName.Split(' ').Length - 1]));
+            LocalStudents.Sort((student1, student2) => string.Compare(student1.Name.Split(' ')[student1.Name.Split(' ').Length - 1], student2.Name.Split(' ')[student2.Name.Split(' ').Length - 1]));
             this.Students = new ObservableCollection<Student>(LocalStudents);
 
             //Update other lists that reference this list
@@ -519,16 +533,16 @@ namespace AceGrading
         public ReturnValidation ReName_Student(Student student, string NewName)
         {
             //Check if empty
-            if (student.StudentName == null || student.StudentName == "")
+            if (student.Name == null || student.Name == "")
                 return new ReturnValidation(_IsOk: false, _Header: "Rename Student", _Body: "A student must receive a valid name.");
 
             //Check if the student name matches any other student names
             foreach (Student tempStudent in this.Students)
-                if (NewName.ToLower() == tempStudent.StudentName.ToLower())
+                if (NewName.ToLower() == tempStudent.Name.ToLower())
                     if (tempStudent != student)
                         return new ReturnValidation(_IsOk: false, _Header: "Rename Student", _Body: "A student by this name already exists.");
 
-            student.StudentName = NewName;
+            student.Name = NewName;
             return new ReturnValidation(_IsOk: true);
         }
         public ReturnValidation ReName_Test(Test test, string NewName)

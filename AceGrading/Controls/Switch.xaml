@@ -1,0 +1,139 @@
+﻿<UserControl x:Class="AceGrading.Switch"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AceGrading"
+             mc:Ignorable="d"
+             x:Name="main">
+
+    <UserControl.Resources>
+        <Style x:Key="OnSwitch" TargetType="{x:Type ToggleButton}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Border CornerRadius="5,0,0,5" 
+                                Background="{TemplateBinding Background}"
+                                BorderThickness="3" 
+                                BorderBrush="{TemplateBinding BorderBrush}">
+
+                            <TextBlock x:Name="TextBlk" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <ContentPresenter/>
+                            </TextBlock>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsMouseOver" Value="True"/>
+                                        <Condition Property="IsChecked" Value="True"/>
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="Background" Value="{StaticResource Blue}"/>
+                                    <Setter Property="BorderBrush" Value="{StaticResource Blue}"/>
+                                    <Setter TargetName="TextBlk" Property="Foreground" Value="White"/>
+                                </MultiTrigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsMouseOver" Value="False"/>
+                                        <Condition Property="IsChecked" Value="True"/>
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="Background" Value="{StaticResource FlatBlue}"/>
+                                    <Setter Property="BorderBrush" Value="{StaticResource FlatBlue}"/>
+                                <Setter TargetName="TextBlk" Property="Foreground" Value="White"/>
+                            </MultiTrigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsMouseOver" Value="True"/>
+                                        <Condition Property="IsChecked" Value="False"/>
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="Background" Value="Transparent"/>
+                                    <Setter Property="BorderBrush" Value="{StaticResource Blue}"/>
+                                <Setter TargetName="TextBlk" Property="Foreground" Value="{StaticResource DarkGray2}"/>
+                            </MultiTrigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsMouseOver" Value="False"/>
+                                    <Condition Property="IsChecked" Value="False"/>
+                                </MultiTrigger.Conditions>
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="BorderBrush" Value="{StaticResource FlatBlue}"/>
+                                <Setter TargetName="TextBlk" Property="Foreground" Value="{StaticResource DarkGray2}"/>
+                            </MultiTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="OffSwitch" TargetType="{x:Type ToggleButton}" BasedOn="{StaticResource OnSwitch}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Border CornerRadius="0,5,5,0"  Background="{TemplateBinding Background}" BorderThickness="3" BorderBrush="{TemplateBinding BorderBrush}">
+                            <TextBlock Name="TextBlk" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <ContentPresenter/>
+                            </TextBlock>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsMouseOver" Value="True"/>
+                                    <Condition Property="IsChecked" Value="True"/>
+                                </MultiTrigger.Conditions>
+                                <Setter Property="Background" Value="{StaticResource Blue}"/>
+                                <Setter Property="BorderBrush" Value="{StaticResource Blue}"/>
+                                <Setter TargetName="TextBlk" Property="Foreground" Value="White"/>
+                            </MultiTrigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsMouseOver" Value="False"/>
+                                    <Condition Property="IsChecked" Value="True"/>
+                                </MultiTrigger.Conditions>
+                                <Setter Property="Background" Value="{StaticResource FlatBlue}"/>
+                                <Setter Property="BorderBrush" Value="{StaticResource FlatBlue}"/>
+                                <Setter TargetName="TextBlk" Property="Foreground" Value="White"/>
+                            </MultiTrigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsMouseOver" Value="True"/>
+                                    <Condition Property="IsChecked" Value="False"/>
+                                </MultiTrigger.Conditions>
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="BorderBrush" Value="{StaticResource Blue}"/>
+                                <Setter TargetName="TextBlk" Property="Foreground" Value="{StaticResource DarkGray2}"/>
+                            </MultiTrigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsMouseOver" Value="False"/>
+                                    <Condition Property="IsChecked" Value="False"/>
+                                </MultiTrigger.Conditions>
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="BorderBrush" Value="{StaticResource FlatBlue}"/>
+                                <Setter TargetName="TextBlk" Property="Foreground" Value="{StaticResource DarkGray2}"/>
+                            </MultiTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid DataContext="{Binding ElementName=main}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+
+        </Grid.ColumnDefinitions>
+
+        <RadioButton Content="{Binding LeftLabel, FallbackValue=LeftLabel}" 
+                     Style="{DynamicResource OnSwitch}" 
+                     IsChecked="{Binding IsLeftChecked, FallbackValue=True}"
+                     Grid.Column="0"
+                     Height="{StaticResource BtnHeight}"/>
+
+        <RadioButton Content="{Binding RightLabel, FallbackValue=RightLabel}" 
+                     Style="{DynamicResource OffSwitch}" 
+                     IsChecked="{Binding IsRightChecked, FallbackValue=False}"
+                     Grid.Column="1"
+                     Height="{StaticResource BtnHeight}"/>
+        
+    </Grid>
+</UserControl>

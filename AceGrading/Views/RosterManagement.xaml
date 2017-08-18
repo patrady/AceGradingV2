@@ -1,0 +1,689 @@
+﻿<UserControl x:Class="AceGrading.RosterManagement"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AceGrading"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             mc:Ignorable="d" 
+             d:DesignHeight="{StaticResource DesignHeight}" d:DesignWidth="1200" 
+             Background="{StaticResource LightGray1}">
+    <UserControl.Resources>
+        <sys:Int32 x:Key="ClassNameLength">70</sys:Int32>
+        <sys:Int32 x:Key="ClassSectionLength">10</sys:Int32>
+        <sys:Int32 x:Key="StudentNameLength">40</sys:Int32>
+    </UserControl.Resources>
+    
+    <Grid Background="{StaticResource LightGray1}"  
+          Margin="10,0,10,10">
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <!--DESIGN MODE VIEW SWITCHER-->
+        <DockPanel HorizontalAlignment="Center">
+            <RadioButton Name="SelectClass_RB" Content="Select a Class" Margin="3" IsChecked="False"/>
+            <RadioButton Name="ViewClass_RB" Content="View Class" Margin="3" IsChecked="False"/>
+            <RadioButton Name="AddClass_RB" Content="Add a Class" Margin="3" IsChecked="False"/>
+            <RadioButton Name="NoClasses_RB" Content="No Classes" Margin="3" IsChecked="False"/>
+            <RadioButton Name="ViewStudent_RB" Content="View Student" Margin="3" IsChecked="False"/>
+            <RadioButton Name="Confirm_RB" Content="Confirmation Wins" Margin="3" IsChecked="True"/>
+        </DockPanel>
+
+        <!--Select a Class Grid-->
+        <Grid Name="SelectClass_Grid" 
+              Visibility="{Binding ElementName=SelectClass_RB, Path=IsChecked, Converter={StaticResource BoolToVis}}" 
+              Grid.Row="1">
+            
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="100"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition/>
+                <RowDefinition Height="80"/>
+            </Grid.RowDefinitions>
+
+            <!--Header-->
+            <local:LargeNumber Number="10" 
+                               Label="Total Classes" 
+                               Grid.Row="1"/>
+
+            <!--Instructions-->
+            <local:InstructionsUIHelper Label="Select a Class" 
+                                        Grid.Row="2"/>
+
+            <!--Body-->
+            <ListBox Name="classListbx" 
+                     Background="Transparent" 
+                     BorderBrush="{x:Null}" 
+                     Grid.Row="3"
+                     HorizontalAlignment="Center"
+                     ScrollViewer.VerticalScrollBarVisibility="Auto" 
+                     HorizontalContentAlignment="Stretch" 
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                <!--ItemsSource="{Binding Classes}" SelectedItem="{Binding SelectedClass}"-->
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Name="ClassItem" 
+                              Height="150" 
+                              Width="150" 
+                              Background="Transparent"
+                              Margin="5">
+                            
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition Height="50"/>
+                            </Grid.RowDefinitions>
+
+                            <!--Class Info-->
+                            <local:CircleInitials Type="Class" 
+                                                  Initials="{Binding Class_Initials}"/>
+                            <TextBlock Text="{Binding Class_Name}" 
+                                       Grid.Row="1" 
+                                       TextWrapping="Wrap" 
+                                       Foreground="{StaticResource DarkGray1}"
+                                       VerticalAlignment="Top" 
+                                       TextAlignment="Center"
+                                       Padding="2"/>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+                <ListBox.Items>
+                    <local:Class Class_Name="Theology I"/>
+                    <local:Class Class_Name="Theology II"/>
+                    <local:Class Class_Name="Theology III"/>
+                    <local:Class Class_Name="Theology IV"/>
+                    <local:Class Class_Name="Theology V"/>
+                    <local:Class Class_Name="Theology I"/>
+                    <local:Class Class_Name="Theology II"/>
+                    <local:Class Class_Name="Theology III"/>
+                    <local:Class Class_Name="Theology IV"/>
+                    <local:Class Class_Name="Theology V"/>
+                </ListBox.Items>
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+            </ListBox>
+
+            <!--Footer-->
+            <WrapPanel Grid.Row="4"
+                       HorizontalAlignment="Right" 
+                       VerticalAlignment="Center">
+                
+                <Button Style="{StaticResource FlatGreenBtn}" 
+                        Content="Add Class"/>
+                <Button Style="{StaticResource FlatBlueBtn}" 
+                        Content="View Class" 
+                        Margin="5,0,0,0"/>
+            </WrapPanel>
+        </Grid>
+
+        <!--View a Class Grid-->
+        <Grid Name="ViewClass_Grid"  
+              Visibility="{Binding ElementName=ViewClass_RB, Path=IsChecked, Converter={StaticResource BoolToVis}}" 
+              Grid.Row="1">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="180"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition/>
+                <RowDefinition Height="80"/>
+            </Grid.RowDefinitions>
+
+            <!--Header-->
+            <StackPanel Grid.Row="1">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="200"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <!--Number of Students-->
+                    <local:LargeNumber Number="{Binding SelectedTest.StudentCount}" 
+                                       Label="Students" 
+                                       LabelPosition="Left"
+                                       HorizontalAlignment="Right"/>
+
+                    <!--Current Class Circle-->
+                    <local:CircleInitials Type="Class" 
+                                                    Initials="{Binding SelectedClass.Class_Initials}" 
+                                                    Grid.Column="1"/>
+
+                    <!--Number of Tests-->
+                    <local:LargeNumber Number="{Binding SelectedTest.TestCount}" 
+                                       Label="Tests" 
+                                       LabelPosition="Right"
+                                       Grid.Column="2" 
+                                       HorizontalAlignment="Left"/>
+                </Grid>
+                
+                <!--Class Name-->
+                <StackPanel Name="ClassName_Grid" 
+                            HorizontalAlignment="Center">
+                    
+                    <!--Class Name Textbox-->
+                    <local:TextBoxCustom Text="{Binding SelectedTest.Class_Name}"
+                                         Placeholder="Class Name" Width="400" 
+                                         MaxLength="{StaticResource ClassNameLength}"
+                                         FontSize="20"
+                                         Padding="2"
+                                         TextAlignment="Center"/>
+                    
+                    <!--Section Number Textbox-->
+                    <local:TextBoxCustom Text="" 
+                                         Placeholder="Section No. (Optional)" 
+                                         MaxLength="{StaticResource ClassSectionLength}"
+                                         Width="200" 
+                                         Padding="2"
+                                         TextAlignment="Center"/>
+                </StackPanel>
+            </StackPanel>
+
+
+            <!--Instructions-->
+            <local:InstructionsUIHelper Label="Select a Student"
+                                        Grid.Row="2"/>
+
+            <!--List of Students-->
+            <ListBox Name="Students_Listbox" 
+                     Background="Transparent" 
+                     BorderBrush="{x:Null}" 
+                     HorizontalAlignment="Center"
+                     Grid.Row="3"
+                     ScrollViewer.VerticalScrollBarVisibility="Auto" 
+                     HorizontalContentAlignment="Stretch" 
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Name="StudentItem" 
+                              MinHeight="150" 
+                              Width="150" 
+                              Background="Transparent">
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="110"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+
+                            <Grid Grid.Row="0">
+                                <!--Delete Button-->
+                                <Button Style="{StaticResource RedDeleteBtn}" 
+                                        Content="X"
+                                        Margin="3"
+                                        VerticalAlignment="Top" 
+                                        HorizontalAlignment="Right"
+                                        Visibility="{Binding Path=IsMouseOver, ElementName=StudentItem, Converter={StaticResource BoolToVis}}"/>
+
+                                <!--Student Circle with Initials-->
+                                <local:CircleInitials Initials="{Binding Initials}" 
+                                                                Type="Student"
+                                                                Margin="0,10,0,0"/>
+                            </Grid>
+
+                            <!--Class Info-->
+                            <Grid Grid.Row="1"
+                                  VerticalAlignment="Center">
+
+                                <local:TextBoxCustom Placeholder="Student Name" 
+                                                     Text="{Binding Name}" 
+                                                     TextAlignment="Center" 
+                                                     Width="150" 
+                                                     MaxLength="{StaticResource StudentNameLength}"
+                                                     Padding="5"/>
+                            </Grid>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+                <ListBox.Items>
+                    <local:Student Name="Tucker Ike"/>
+                    <local:Student Name="Courtney Ice"/>
+                    <local:Student Name="Theodore Rosevelt"/>
+                    <local:Student Name="Sofia Ethan"/>
+                    <local:Student Name="Curt Chris"/>
+                    <local:Student Name="Patrick Brady"/>
+                    <local:Student Name="James Robert"/>
+                    <local:Student Name="Julie Marie"/>
+                    <local:Student Name="Bob Anthony"/>
+                    <local:Student Name="Teresa Patricia"/>
+                </ListBox.Items>
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+            </ListBox>
+
+            <!--Footer-->
+            <WrapPanel Grid.Row="4" HorizontalAlignment="Right" VerticalAlignment="Center">
+                
+                <!--Back Button-->
+                <Button Style="{StaticResource FlatBlueOutlineBtn}" 
+                        Content="Back" 
+                        Margin="5"/>
+                
+                <!--Delete Class Button-->
+                <Button Style="{StaticResource FlatRedBtn}" 
+                        Content="Delete Class" 
+                        Margin="5"/>
+                
+                <!--Add a Student Button-->
+                <Button Style="{StaticResource FlatGreenBtn}" 
+                        Content="Add a Student" 
+                        Margin="5"/>
+                
+                <!--View Student Button-->
+                <Button Style="{StaticResource FlatBlueBtn}" 
+                        Content="View Student" 
+                        Margin="5"/>
+            </WrapPanel>
+        </Grid>
+
+        <!--Add a Class Grid-->
+        <Grid Name="AddClass_Grid"  
+              Visibility="{Binding ElementName=AddClass_RB, Path=IsChecked, Converter={StaticResource BoolToVis}}" 
+              Grid.Row="1">
+            
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="150"/>
+                <RowDefinition Height="150"/>
+                <RowDefinition/>
+                <RowDefinition Height="80"/>
+            </Grid.RowDefinitions>
+
+            <!--Class Name-->
+            <StackPanel Grid.Row="1">
+                <!--Instructions-->
+                <local:InstructionsUIHelper Label="Class Name"/>
+
+                <DockPanel Grid.Column="1"
+                           HorizontalAlignment="Center" 
+                           Margin="0,10,0,0">
+                    
+                    <!--Current Class Circle-->
+                    <local:CircleInitials Initials="NC" Type="Class" Margin="0,0,20,0"/>
+
+                    <!--Class Name Textbox-->
+                    <StackPanel VerticalAlignment="Center">
+                        
+                        <!--Class Name Textbox-->
+                        <local:TextBoxCustom Placeholder="Class Name" 
+                                             Width="300"
+                                             MinHeight="{StaticResource BtnHeight}"
+                                             MaxLength="{StaticResource ClassNameLength}"
+                                             Margin="5"/>
+                        
+                        <!--Section Number Textbox-->
+                        <local:TextBoxCustom Placeholder="Section No. (Optional)"
+                                             Margin="5"
+                                             MinHeight="{StaticResource BtnHeight}"
+                                             MaxLength="{StaticResource ClassSectionLength}"
+                                             HorizontalAlignment="Left" 
+                                             Width="150"/>
+                    </StackPanel>
+                </DockPanel>
+            </StackPanel>
+
+            <!--Add Student-->
+            <StackPanel Grid.Row="2">
+                <!--Instructions-->
+                <local:InstructionsUIHelper Label="Add a Student"/>
+
+                <DockPanel Grid.Column="1" 
+                           HorizontalAlignment="Center" 
+                           Margin="0,10,0,0">
+                    
+                    <!--Student Circle-->
+                    <local:CircleInitials Initials="NS" 
+                                                    Type="Student"
+                                                    Margin="0,0,20,0"/>
+
+                    <!--Student Name Textbox-->
+                    <local:TextBoxCustom Placeholder="Student Name" 
+                                         Width="300" 
+                                         MinHeight="{StaticResource BtnHeight}"
+                                         MaxLength="{StaticResource StudentNameLength}"
+                                         VerticalAlignment="Center"/>
+
+                    <!--Add Student Button-->
+                    <Button Style="{StaticResource FlatGreenBtn}" 
+                            Content="Add" 
+                            Margin="5,0" 
+                            VerticalAlignment="Center"/>
+                </DockPanel>
+            </StackPanel>
+
+            <!--Students in Class-->
+            <Grid Grid.Row="3">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="65"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <!--Number of Students in the Class-->
+                <local:LargeNumber Number="18" 
+                                   LabelPosition="Left"
+                                   Label="Students" 
+                                   Size="Medium"/>
+
+                <!--Students Listbox-->
+                <ListBox Name="NewStudents_Listbox" 
+                         Background="Transparent" 
+                         BorderBrush="{x:Null}"
+                         Grid.Row="1" 
+                         HorizontalAlignment="Center"
+                         ScrollViewer.VerticalScrollBarVisibility="Auto" 
+                         HorizontalContentAlignment="Stretch" 
+                         ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Name="StudentItem" 
+                              MinHeight="150" 
+                              Width="150" 
+                              Background="Transparent">
+
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="110"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+
+                                <Grid Grid.Row="0">
+                                    <!--Delete Button-->
+                                    <Button Style="{StaticResource RedDeleteBtn}" 
+                                            Content="X"
+                                            Margin="3"
+                                            VerticalAlignment="Top" 
+                                            HorizontalAlignment="Right"
+                                            Visibility="{Binding Path=IsMouseOver, ElementName=StudentItem, Converter={StaticResource BoolToVis}}"/>
+
+                                    <!--Student Circle with Initials-->
+                                    <local:CircleInitials Initials="{Binding Initials}" 
+                                                                    Type="Student"
+                                                                    Margin="0,10,0,0"/>
+                                </Grid>
+
+                                <!--Class Info-->
+                                <Grid Grid.Row="1"
+                                      VerticalAlignment="Center">
+
+                                    <!--Student Name Textbox-->
+                                    <local:TextBoxCustom Placeholder="Student Name" 
+                                                         Text="{Binding Name}" 
+                                                         TextAlignment="Center" 
+                                                         Width="150" 
+                                                         MaxLength="{StaticResource StudentNameLength}"
+                                                         Padding="5"/>
+                                </Grid>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                    <ListBox.Items>
+                        <local:Student Name="Tucker Ike"/>
+                        <local:Student Name="Courtney Ice"/>
+                        <local:Student Name="Theodore Rosevelt"/>
+                        <local:Student Name="Sofia Ethan"/>
+                        <local:Student Name="Curt Chris"/>
+                        <local:Student Name="Patrick Brady"/>
+                        <local:Student Name="James Robert"/>
+                        <local:Student Name="Julie Marie"/>
+                        <local:Student Name="Bob Anthony"/>
+                        <local:Student Name="Teresa Patricia"/>
+                    </ListBox.Items>
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel/>
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                </ListBox>
+            </Grid>
+
+            <!--Footer-->
+            <WrapPanel Grid.Row="4" HorizontalAlignment="Right" VerticalAlignment="Center">
+                
+                <!--Cancel Button-->
+                <Button Style="{StaticResource FlatBlueOutlineBtn}" 
+                        Content="Cancel" 
+                        Margin="5,0"/>
+                
+                <!--Save Button-->
+                <Button Style="{StaticResource FlatBlueBtn}" 
+                        Content="Save" 
+                        Margin="5,0"/>
+            </WrapPanel>
+        </Grid>
+        
+        <!--No Classes Grid-->
+        <Grid Name="NoClasses_Grid" 
+              Visibility="{Binding ElementName=NoClasses_RB, Path=IsChecked, Converter={StaticResource BoolToVis}}"
+              Grid.Row="1">
+
+            <StackPanel  VerticalAlignment="Center">
+
+                <!--"You Seem to have no classes..." Textbox-->
+                <TextBlock TextAlignment="Center" 
+                           FontSize="20">
+                            You seem to have no classes,<LineBreak/> would you like to make your first one?
+                </TextBlock>
+
+                <!--Create First Class Button-->
+                <Button Style="{StaticResource FlatGreenBtn}" 
+                        Content="Create a Class" 
+                        HorizontalAlignment="Center" 
+                        Margin="0,20,0,0"/>
+
+            </StackPanel>
+        </Grid>
+
+        <!--View Student Grid-->
+        <Grid Name="ViewStudent_Grid" 
+              Visibility="{Binding ElementName=ViewStudent_RB, Path=IsChecked, Converter={StaticResource BoolToVis}}" 
+              Grid.Row="1">
+            
+            <Grid.RowDefinitions>
+                <RowDefinition Height="130"/>
+                <RowDefinition MinHeight="185"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="80"/>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0"
+                  HorizontalAlignment="Center">
+
+                <!--Student Initials-->
+                <local:CircleInitials Type="Student" 
+                                            Initials="AA" 
+                                            VerticalAlignment="Top"/>
+                <!--Student Name-->
+                <TextBlock Text="Student Name" 
+                       HorizontalAlignment="Center" 
+                       VerticalAlignment="Bottom" 
+                       FontSize="20"/>
+                
+            </Grid>
+
+
+            <!--Charts Grid-->
+            <Grid Grid.Row="1" HorizontalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition MinWidth="100" 
+                                      MaxWidth="175"/>
+                    <ColumnDefinition MinWidth="100"
+                                      MaxWidth="175"/>
+                    <ColumnDefinition MinWidth="100"
+                                      MaxWidth="175"/>
+                    <ColumnDefinition MinWidth="100" 
+                                      MaxWidth="175"/>
+                </Grid.ColumnDefinitions>
+                
+                <!--Class Rank-->
+                <local:LargeNumber Number="10" 
+                                   Label="Class Rank"
+                                   LabelPosition="Bottom"
+                                   Size="Large"
+                                   Padding="10"/>
+                
+                <!--Most Recent Score-->
+                <local:CircleProgressBar Value="73"
+                                         StrokeColor="{StaticResource FlatGreen}"
+                                         Foreground="{StaticResource DarkGray1}"
+                                         Label="Most Recent Score"
+                                         Grid.Column="1"/>
+
+                <!--Average Test Score-->
+                <local:CircleProgressBar Value="80"
+                                         StrokeColor="{StaticResource FlatGreen}"
+                                         Foreground="{StaticResource DarkGray1}"
+                                         Label="Average Score"
+                                         Grid.Column="2"/>
+
+                <!--Tests Taken-->
+                <local:LargeNumber Grid.Column="3" 
+                                   Number="7" 
+                                   LabelPosition="Bottom"
+                                   Label="Tests Taken" 
+                                   Padding="10"/>
+            </Grid>
+
+            <!--Tests Table Grid-->
+            <Grid Grid.Row="2"
+                  HorizontalAlignment="Center">
+
+                <DataGrid AlternatingRowBackground="{StaticResource LightGray2}" 
+                          RowBackground="{StaticResource Gray1}" 
+                          RowHeight="25"
+                          VerticalAlignment="Top"
+                          RowHeaderWidth="0"
+                          HorizontalGridLinesBrush="{x:Null}"
+                          VerticalGridLinesBrush="{x:Null}"
+                          BorderBrush="{x:Null}">
+
+                    <DataGrid.Columns>
+                        <!--Test Name Column-->
+                        <DataGridTextColumn Binding="{Binding TestName}" 
+                                            MinWidth="300" 
+                                            Header="Name"/>
+                        
+                        <!--Test Date Column-->
+                        <DataGridTextColumn Binding="{Binding Upload_File_Name}" 
+                                            MinWidth="150" 
+                                            Header="Date"/>
+                        
+                        <!--Test Score Column-->
+                        <DataGridTextColumn Binding="{Binding AverageScore, StringFormat={}{0}%}" 
+                                            MinWidth="150" 
+                                            Header="Score"/>
+                        
+                    </DataGrid.Columns>
+                    <DataGrid.ColumnHeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="Background" Value="{StaticResource FlatGreen}"/>
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter Property="Height" Value="30"/>
+                            <Setter Property="BorderBrush" Value="{StaticResource LightGray2}"/>
+                            <Setter Property="BorderThickness" Value="0.7,0"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="{DynamicResource Green}"/>
+                                </Trigger>
+                                <Trigger Property="IsMouseOver" Value="False">
+                                    <Setter Property="Background" Value="{DynamicResource LightGreen}"/>
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter Property="Background" Value="{DynamicResource DarkGreen}"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.ColumnHeaderStyle>
+                    <DataGrid.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                            <Setter Property="Foreground" Value="{StaticResource DarkGray1}"/>
+                            <Setter Property="BorderBrush" Value="{x:Null}"/>
+                            <Style.Triggers>
+                                <Trigger Property="DataGridCell.IsSelected" Value="True">
+                                    <Setter Property="Background" Value="{StaticResource Blue}"/>
+                                    <Setter Property="BorderBrush" Value="{x:Null}"/>
+                                    <Setter Property="Foreground" Value="White"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.CellStyle>
+                    <DataGrid.Items>
+                        <local:Test TestName="Test #1" AverageScore="10" Upload_File_Name="January 1, 2017"/>
+                        <local:Test TestName="Test #2" AverageScore="20" Upload_File_Name="January 2, 2017"/>
+                        <local:Test TestName="Test #3" AverageScore="30" Upload_File_Name="January 3, 2017"/>
+                        <local:Test TestName="Test #4" AverageScore="40" Upload_File_Name="January 4, 2017"/>
+                        <local:Test TestName="Test #5" AverageScore="50" Upload_File_Name="January 5, 2017"/>
+                        <local:Test TestName="Test #6" AverageScore="60" Upload_File_Name="January 6, 2017"/>
+                        <local:Test TestName="Test #7" AverageScore="70" Upload_File_Name="January 7, 2017"/>
+                        <local:Test TestName="Test #8" AverageScore="80" Upload_File_Name="January 8, 2017"/>
+                        <local:Test TestName="Test #9" AverageScore="90" Upload_File_Name="January 9, 2017"/>
+                        <local:Test TestName="Test #1" AverageScore="10" Upload_File_Name="January 1, 2017"/>
+                        <local:Test TestName="Test #2" AverageScore="20" Upload_File_Name="January 2, 2017"/>
+                        <local:Test TestName="Test #3" AverageScore="30" Upload_File_Name="January 3, 2017"/>
+                        <local:Test TestName="Test #4" AverageScore="40" Upload_File_Name="January 4, 2017"/>
+                        <local:Test TestName="Test #5" AverageScore="50" Upload_File_Name="January 5, 2017"/>
+                        <local:Test TestName="Test #6" AverageScore="60" Upload_File_Name="January 6, 2017"/>
+                        <local:Test TestName="Test #7" AverageScore="70" Upload_File_Name="January 7, 2017"/>
+                        <local:Test TestName="Test #8" AverageScore="80" Upload_File_Name="January 8, 2017"/>
+                        <local:Test TestName="Test #9" AverageScore="90" Upload_File_Name="January 9, 2017"/>
+                        <local:Test TestName="Test #1" AverageScore="10" Upload_File_Name="January 1, 2017"/>
+                        <local:Test TestName="Test #2" AverageScore="20" Upload_File_Name="January 2, 2017"/>
+                        <local:Test TestName="Test #3" AverageScore="30" Upload_File_Name="January 3, 2017"/>
+                        <local:Test TestName="Test #4" AverageScore="40" Upload_File_Name="January 4, 2017"/>
+                        <local:Test TestName="Test #5" AverageScore="50" Upload_File_Name="January 5, 2017"/>
+                        <local:Test TestName="Test #6" AverageScore="60" Upload_File_Name="January 6, 2017"/>
+                        <local:Test TestName="Test #7" AverageScore="70" Upload_File_Name="January 7, 2017"/>
+                        <local:Test TestName="Test #8" AverageScore="80" Upload_File_Name="January 8, 2017"/>
+                        <local:Test TestName="Test #9" AverageScore="90" Upload_File_Name="January 9, 2017"/>
+                    </DataGrid.Items>
+                </DataGrid>
+            </Grid>
+
+            <!--Footer-->
+            <WrapPanel Grid.Row="3"
+                       HorizontalAlignment="Right" 
+                       VerticalAlignment="Center">
+                
+                <!--Back Button-->
+                <Button Style="{StaticResource FlatBlueOutlineBtn}" 
+                        Content="Back" 
+                        Margin="5,0"/>
+                
+                <!--Delete Student Button-->
+                <Button Style="{StaticResource FlatRedBtn}" 
+                        Content="Delete Student" 
+                        Margin="5,0"/>
+            </WrapPanel>
+        </Grid>
+          
+        <!--Confirmation Windows-->
+        <Grid Visibility="{Binding ElementName=Confirm_RB, Path=IsChecked, Converter={StaticResource BoolToVis}}" 
+              Grid.Row="1">
+            
+            <StackPanel>
+                <local:ConfirmationWindow Type="Good" 
+                                          Text="This is a great message!"
+                                          ButtonOptions="Continue"/>
+                
+                <local:ConfirmationWindow Type="Error" 
+                                          Text="This is an error message!"
+                                          ButtonOptions="YesNoCancel"/>
+                
+                <local:ConfirmationWindow Type="Warning" Text="This is a warning message!"
+                                          ButtonOptions="YesCancel"/>
+
+            </StackPanel>
+            
+        </Grid>
+    </Grid>
+</UserControl>

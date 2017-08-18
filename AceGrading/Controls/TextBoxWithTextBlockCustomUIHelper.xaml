@@ -1,0 +1,40 @@
+﻿<UserControl x:Class="AceGrading.TextBoxWithTextBlockCustom"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AceGrading"
+             mc:Ignorable="d" x:Name="Main">
+    <Border CornerRadius="3" Height="30" DataContext="{Binding ElementName=Main}">
+        <Border.Style>
+            <Style TargetType="{x:Type Border}">
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="{StaticResource LightGray2}"/>
+                    </Trigger>
+                    <Trigger Property="IsMouseOver" Value="False">
+                        <Setter Property="Background" Value="Transparent"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </Border.Style>
+        <Grid Name="TopGrid" DataContext="{Binding ElementName=Main}" VerticalAlignment="Center">
+
+            <!--PlaceHolder-->
+            <TextBlock Text="{Binding Placeholder}" 
+                       Visibility="{Binding ElementName=Txtbox, Path=Text, Converter={StaticResource EmptyTextVisConverter}}" 
+                       HorizontalAlignment="Center" 
+                       FontSize="{Binding NewFontSize}"
+                       Foreground="{StaticResource DarkGray2}" 
+                       Margin="0,0,0,4"
+                       IsHitTestVisible="False"/>
+
+            <!--Textbox-->
+            <local:TextBoxCustom x:Name="Txtbox"
+                                 Text="{Binding Text, Mode=TwoWay}" 
+                                 FontSize="{Binding NewFontSize}" 
+                                 Padding="2"/>
+
+        </Grid>
+    </Border>
+</UserControl>

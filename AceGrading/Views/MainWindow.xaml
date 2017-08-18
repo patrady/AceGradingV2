@@ -1,0 +1,131 @@
+﻿<Window x:Class="AceGrading.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AceGrading"
+        xmlns:converters="clr-namespace:System.Windows.Controls;assembly=PresentationFramework" 
+        mc:Ignorable="d"
+        Title="Grading Ace" 
+        Height="900" 
+        Width="1500" 
+        FontFamily="{StaticResource Font}" 
+             FontSize="{StaticResource FontSize}"
+        WindowState="Maximized" Background="{StaticResource LightGray1}">
+    <Window.Resources>
+        <local:MainViewModel x:Key="ViewModel"/>
+    </Window.Resources>
+    <Grid DataContext="{Binding Source={StaticResource ViewModel}}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid Background="{StaticResource FlatBlue}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="5"/>
+                    <RowDefinition Height="{StaticResource SquareDim}"/>
+                    <RowDefinition Height="{StaticResource SquareDim}"/>
+                    <RowDefinition Height="{StaticResource SquareDim}"/>
+                    <RowDefinition Height="{StaticResource SquareDim}"/>
+                    <RowDefinition Height="{StaticResource SquareDim}"/>
+                </Grid.RowDefinitions>
+
+                <!--Class Management Button-->
+                <RadioButton x:Name="Class_TgleBtn" Grid.Row="1" Style="{StaticResource TabToggleBtn}" ContentStringFormat="Classes">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="{StaticResource SquareDim}"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+
+                        <Image Source="/Icons/student.png" Margin="10"/>
+                    </Grid>
+                </RadioButton>
+
+                <!--Test Toggle Button-->
+                <RadioButton x:Name="Test_TgleBtn" Grid.Row="2" Style="{StaticResource TabToggleBtn}" IsChecked="True" ContentStringFormat="Tests">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="{StaticResource SquareDim}"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+
+                        <Image Source="/Icons/Test.png" Margin="10"/>
+                        <Image Source="/Icons/Test_Selected.png" Margin="10" Visibility="{Binding ElementName=Test_TgleBtn, Path=IsChecked, Converter={StaticResource BoolToVis}}"/>
+                    </Grid>
+                </RadioButton>
+
+                <!--Test Taking Button-->
+                <RadioButton x:Name="TestTaking_TgleBtn" Grid.Row="3" Style="{StaticResource TabToggleBtn}" ContentStringFormat="Start Test">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="{StaticResource SquareDim}"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                    </Grid>
+                </RadioButton>
+
+                <!--Grade Test Button-->
+                <RadioButton x:Name="GradeTest_TgleBtn" Grid.Row="4" Style="{StaticResource TabToggleBtn}" ContentStringFormat="Grade">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="{StaticResource SquareDim}"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                    </Grid>
+                </RadioButton>
+
+                <!--Results Button-->
+                <RadioButton x:Name="Results_TgleBtn" Grid.Row="5" Style="{StaticResource TabToggleBtn}" ContentStringFormat="Results">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="{StaticResource SquareDim}"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                    </Grid>
+                </RadioButton>
+            </Grid>
+
+            <StackPanel VerticalAlignment="Bottom"
+                        Margin="10">
+
+                <!--Class Initials-->
+                <local:CircleInitials Initials="NC"
+                                                Type="Class"
+                                                Padding="5"/>
+
+                <!--Switch Class Button-->
+                <Button Style="{StaticResource WhiteTextBtn}" 
+                        Content="Switch Class"/>
+            </StackPanel>
+        </Grid>
+
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="5"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0"  Background="{DynamicResource FlatBlue}"/>
+            <Grid Grid.Row="1" Visibility="{Binding ElementName=Class_TgleBtn, Path=IsChecked, Converter={StaticResource BoolToVis}}">
+                <local:RosterManagement/>
+            </Grid>
+
+            <Grid Grid.Row="1" Visibility="{Binding ElementName=Test_TgleBtn, Path=IsChecked, Converter={StaticResource BoolToVis}}">
+                <local:TestManagement/>
+            </Grid>
+
+            <Grid Grid.Row="1" Visibility="{Binding ElementName=TestTaking_TgleBtn, Path=IsChecked, Converter={StaticResource BoolToVis}}">
+                <local:StartTest/>
+            </Grid>
+
+            <Grid Grid.Row="1" Visibility="{Binding ElementName=GradeTest_TgleBtn, Path=IsChecked, Converter={StaticResource BoolToVis}}">
+                <local:GradeTest/>
+            </Grid>
+
+            <Grid Grid.Row="1" Visibility="{Binding ElementName=Results_TgleBtn, Path=IsChecked, Converter={StaticResource BoolToVis}}">
+                <local:TestResults/>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>

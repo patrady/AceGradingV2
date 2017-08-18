@@ -1,0 +1,77 @@
+﻿<UserControl x:Class="AceGrading.NumberCarousel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AceGrading"
+             mc:Ignorable="d"
+             x:Name="main">
+    <UserControl.Resources>
+        <Style TargetType="RepeatButton" x:Key="FontSizeStyle" BasedOn="{StaticResource GrayTextRepeatBtn}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Size}" Value="Small">
+                    <Setter Property="FontSize" Value="{StaticResource SmallFontSize}"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Size}" Value="Medium">
+                    <Setter Property="FontSize" Value="{StaticResource MediumFontSize}"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Size}" Value="Large">
+                    <Setter Property="FontSize" Value="{StaticResource MediumFontSize}"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="TextBlock" x:Key="PaddingStyle">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Size}" Value="Small">
+                    <Setter Property="Margin" Value="0,8,0,0"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Size}" Value="Medium">
+                    <Setter Property="Margin" Value="0,23,0,0"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Size}" Value="Large">
+                    <Setter Property="Margin" Value="0,35,0,0"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+    
+    
+    <DockPanel DataContext="{Binding ElementName=main}">
+        <StackPanel>
+
+            <!--Up Button-->
+            <RepeatButton Content="^"
+                          Style="{StaticResource FontSizeStyle}"
+                          Click="UpButton_Click"
+                          Margin="0,0,7,0"/>
+
+            <!--Number-->
+            <local:LargeNumber Number="{Binding Number, FallbackValue=100}" 
+                               Size="{Binding Size, FallbackValue=Small}"
+                               Label=""/>
+
+            <!--Down Button-->
+            <RepeatButton Content="^" 
+                          Style="{StaticResource FontSizeStyle}" 
+                          RenderTransformOrigin="0.5,0.5"
+                          Margin="0,0,7,0"
+                          Click="DownButton_Click">
+                <RepeatButton.RenderTransform>
+                    <RotateTransform Angle="180"/>
+                </RepeatButton.RenderTransform>
+            </RepeatButton>
+
+        </StackPanel>
+        
+        <!--Label-->
+        <TextBlock Text="{Binding Label}"  
+                   Foreground="{DynamicResource DarkGray2}" 
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Left"
+                   TextWrapping="Wrap"
+                   MaxWidth="{Binding LabelWidth}"
+                   Style="{StaticResource PaddingStyle}"/>
+
+    </DockPanel>
+
+</UserControl>
