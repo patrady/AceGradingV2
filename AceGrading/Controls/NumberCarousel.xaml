@@ -46,9 +46,11 @@
                           Margin="0,0,7,0"/>
 
             <!--Number-->
-            <local:LargeNumber Number="{Binding Number, FallbackValue=100}" 
+            <local:LargeNumber Number="{Binding Number, FallbackValue=100, Mode=TwoWay}" 
                                Size="{Binding Size, FallbackValue=Small}"
-                               Label=""/>
+                               Label=""
+                               IsEditable="True"
+                               IsNumber="True"/>
 
             <!--Down Button-->
             <RepeatButton Content="^" 

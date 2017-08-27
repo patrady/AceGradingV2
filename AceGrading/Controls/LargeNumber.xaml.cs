@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Text.RegularExpressions;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace AceGrading
@@ -62,6 +63,33 @@ namespace AceGrading
 
 
 
+        public bool IsEditable
+        {
+            get { return (bool)GetValue(IsEditableProperty); }
+            set { SetValue(IsEditableProperty, value); }
+        }
+
+        public static readonly DependencyProperty IsEditableProperty =
+            DependencyProperty.Register("IsEditable", typeof(bool), typeof(LargeNumber), new PropertyMetadata(false));
+
+        public bool IsNumber
+        {
+            get { return (bool)GetValue(IsNumberProperty); }
+            set { SetValue(IsNumberProperty, value); }
+        }
+
+        public static readonly DependencyProperty IsNumberProperty =
+            DependencyProperty.Register("IsNumber", typeof(bool), typeof(LargeNumber), new PropertyMetadata(true));
+
+
+
+
+
+        private void TextBox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
+        {
+            var textBox = sender as TextBox;
+            e.Handled = !Regex.IsMatch(textBox.Text + e.Text, @"^[\d]{1,9}(\.)?([\d]{1,9})?$");
+        }
     }
 
     public enum _Size { Small, Medium, Large }

@@ -56,13 +56,16 @@
                     </Grid>
                 </RadioButton>
 
-                <!--Test Taking Button-->
-                <RadioButton x:Name="TestTaking_TgleBtn" Grid.Row="3" Style="{StaticResource TabToggleBtn}" ContentStringFormat="Start Test">
+                <!--Begin Test Button-->
+                <RadioButton x:Name="TestTaking_TgleBtn" Grid.Row="3" Style="{StaticResource TabToggleBtn}" ContentStringFormat="Begin Test">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="{StaticResource SquareDim}"/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
+                        
+                        <Image Source="/Icons/Play.png" Margin="10"/>
+                        <Image Source="/Icons/Play_Selected.png" Margin="10" Visibility="{Binding ElementName=TestTaking_TgleBtn, Path=IsChecked, Converter={StaticResource BoolToVis}}"/>
                     </Grid>
                 </RadioButton>
 

@@ -1,0 +1,487 @@
+﻿<UserControl x:Class="AceGrading.TestQuestions"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AceGrading"
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="700"
+             FontFamily="{StaticResource Font}">
+
+    <UserControl.Resources>
+        <Grid x:Key="Header"
+              Background="{StaticResource LightGray2}"
+              Name="MainHeader">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="80"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="180"/>
+                <ColumnDefinition Width="40"/>
+            </Grid.ColumnDefinitions>
+
+            <!--Question Number-->
+            <local:LargeNumber Number="50"
+                                           Size="Medium"
+                                           LabelPosition="Bottom"
+                                           Label="Question #"
+                                           LabelWidth="50"/>
+
+            <!--Question Prompt-->
+            <local:TextBoxCustom Placeholder="Question Prompt"
+                                             Grid.Column="1"
+                                             VerticalAlignment="Center"/>
+
+            <!--Question Type Combobox-->
+            <ComboBox Height="30"                                          
+                  Margin="10,0"                         
+                  Grid.Column="2"                                
+                  HorizontalContentAlignment="Center">
+                <ComboBox.Items>
+                    <local:ComboBoxQuestionType Type="Multiple Choice"
+                                            ImageSource="/Icons/Question/MultipleChoice.png"/>
+
+                    <local:ComboBoxQuestionType Type="Check Box"
+                                            ImageSource="/Icons/Question/CheckBox.png"/>
+
+                    <local:ComboBoxQuestionType Type="True / False"
+                                            ImageSource="/Icons/Question/TrueFalse.png"/>
+
+                    <local:ComboBoxQuestionType Type="Show Your Work"
+                                            ImageSource="/Icons/Question/ShowWork.png"/>
+
+                    <local:ComboBoxQuestionType Type="Short Answer"
+                                            ImageSource="/Icons/Question/ShortAnswer.png"/>
+
+                    <local:ComboBoxQuestionType Type="Essay"
+                                            ImageSource="/Icons/Question/Essay.png"/>
+                </ComboBox.Items>
+
+                <ComboBox.ItemTemplate>
+                    <DataTemplate DataType="{x:Type local:ComboBoxQuestionType}">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="{Binding ImageSource}"
+                                               Height="20" Width="20"/>
+                            <TextBlock Text="{Binding Type}" 
+                                               Margin="10,5"
+                                               VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            
+            <!--Image Placeholder-->
+            <Button Style="{StaticResource ImageBtn}"
+                    Width="30"
+                    Height="30"
+                    ToolTip="Add Image"
+                    Grid.Column="3"
+                    HorizontalAlignment="Center"
+                    Visibility="{Binding ElementName=MainHeader, Path=IsMouseOver, Converter={StaticResource BoolToVis}}">
+                <Button.Content>
+                    <Image Source="/Icons/ImagePlaceholder.png"/>
+                </Button.Content>
+            </Button>
+        </Grid>
+        
+        
+    </UserControl.Resources>
+    <Grid>
+        <ListBox Background="Transparent" 
+                 BorderBrush="{x:Null}">
+
+            <ListBox.Items>
+                <local:TrueFalse/>
+            </ListBox.Items>
+
+            <ListBox.Resources>
+
+                <!--Multiple Choice Question-->
+                <DataTemplate DataType="{x:Type local:MultipleChoice}">
+                    <Border Name="MultChoiceQuestion"
+                            CornerRadius="10"
+                            Margin="10"
+                            Background="{StaticResource FlatBlue}">
+
+                        <Grid VerticalAlignment="Top">
+
+                            <!--Move Question-->
+                            <Button
+                        VerticalAlignment="Top"
+                        Height="20"
+                        Cursor="SizeAll">
+                                <Button.Content>
+                                    <Image Source="/Icons/Move.png" Height="8"/>
+                                </Button.Content>
+                                <Button.Style>
+                                    <Style BasedOn="{StaticResource ImageBtn}" TargetType="{x:Type Button}">
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="Transparent"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+
+                            <Border CornerRadius="10"
+                    Name="MainBorder"
+                    Background="{StaticResource LightGray2}"
+                    Margin="5,20">
+
+                                <StackPanel VerticalAlignment="Top"
+                            Margin="5">
+
+                                    <!--Header-->
+                                    <ContentControl Content="{StaticResource Header}"/>
+
+                                    <!--Answers-->
+                                    <StackPanel>
+                                        <ListBox ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                 Background="Transparent"
+                                 BorderBrush="Transparent"
+                                 Grid.Row="1">
+
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate DataType="{x:Type local:Letter}">
+                                                    <Grid x:Name="AnswerGrid"
+                                              Background="{Binding ElementName=MainBorder, Path=Background}">
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition/>
+                                                            <RowDefinition/>
+                                                        </Grid.RowDefinitions>
+
+                                                        <!--Option-->
+                                                        <Grid Grid.Row="0">
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="50"/>
+                                                                <ColumnDefinition/>
+                                                                <ColumnDefinition Width="40"/>
+                                                                <ColumnDefinition Width="40"/>
+                                                            </Grid.ColumnDefinitions>
+
+                                                            <!--Option Letter-->
+                                                            <ToggleButton Style="{StaticResource LetterToggleBtn}"
+                                                      Content="{Binding Character}"/>
+
+                                                            <!--Option Prompt-->
+                                                            <local:TextBoxCustom Placeholder="Option" 
+                                                         Grid.Column="1"
+                                                         Margin="2,5,5,5"/>
+
+                                                            <!--Add Image Placeholder-->
+                                                            <Button Style="{StaticResource ImageBtn}"
+                                                    Width="30"
+                                                    Height="30"
+                                                    Grid.Column="2"
+                                                    HorizontalAlignment="Center"
+                                                    ToolTip="Add Image"
+                                                    Visibility="{Binding ElementName=AnswerGrid, Path=IsMouseOver, Converter={StaticResource BoolToVis}}">
+                                                                <Button.Content>
+                                                                    <Image Source="/Icons/ImagePlaceholder.png"/>
+                                                                </Button.Content>
+                                                            </Button>
+
+                                                            <!--Remove Option-->
+                                                            <Button Style="{StaticResource ImageBtn}"
+                                                    Width="30"
+                                                    Height="30"
+                                                    Grid.Column="3"
+                                                    HorizontalAlignment="Center"
+                                                    ToolTip="Remove Option"
+                                                    Visibility="{Binding ElementName=AnswerGrid, Path=IsMouseOver, Converter={StaticResource BoolToVis}}">
+                                                                <Button.Content>
+                                                                    <Image Source="/Icons/Close.png"/>
+                                                                </Button.Content>
+                                                            </Button>
+
+
+                                                        </Grid>
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                            <ListBox.Items>
+                                                <local:Letter Character="A"/>
+                                                <local:Letter Character="B"/>
+                                                <local:Letter Character="C"/>
+                                            </ListBox.Items>
+                                            <ListBox.ItemContainerStyle>
+                                                <!--This style eliminates any background colors-->
+                                                <Style TargetType="ListBoxItem">
+                                                    <Setter Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate TargetType="ListBoxItem">
+                                                                <ContentPresenter/>
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </ListBox.ItemContainerStyle>
+                                        </ListBox>
+
+                                        <!--Add Option-->
+                                        <Button Style="{StaticResource BlueTextBtn}"
+                                Content="Add Option"
+                                HorizontalAlignment="Left"
+                                Margin="56,5,0,0"/>
+                                    </StackPanel>
+
+                                    <!--Footer-->
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <!--Delete Button-->
+                                        <Button Style="{StaticResource FlatRedBtn}"
+                                Content="Delete"
+                                Grid.Column="1"/>
+
+                                        <!--Point Value-->
+                                        <local:LargeNumber IsEditable="True" 
+                                           Size="Small"
+                                           Label="Pts"
+                                           Grid.Column="2"
+                                           HorizontalAlignment="Right"
+                                           Margin="0,0,10,0"/>
+
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+
+                        </Grid>
+
+                    </Border>
+                </DataTemplate>
+
+                <!--Check Box Question-->
+                <DataTemplate DataType="{x:Type local:CheckBoxQuestion}">
+                    <Border Name="CheckBoxQuestion"
+                            Margin="10"
+                            CornerRadius="10"
+                            Background="{StaticResource FlatBlue}">
+
+                        <Grid VerticalAlignment="Top">
+
+                            <!--Move Question-->
+                            <Button VerticalAlignment="Top"
+                                    Height="20"
+                                    Cursor="SizeAll">
+                                <Button.Content>
+                                    <Image Source="/Icons/Move.png" Height="8"/>
+                                </Button.Content>
+                                <Button.Style>
+                                    <Style BasedOn="{StaticResource ImageBtn}" TargetType="{x:Type Button}">
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="Transparent"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+
+                            <Border CornerRadius="10"
+                                    Name="MainBorder"
+                                    Background="{StaticResource LightGray2}"
+                                    Margin="5,20">
+
+                                <StackPanel VerticalAlignment="Top"
+                                            Margin="5">
+
+                                    <!--Header-->
+                                    <ContentControl Content="{StaticResource Header}"/>
+
+                                    <!--Answers-->
+                                    <StackPanel>
+                                        <ListBox ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                                 Background="Transparent"
+                                                 BorderBrush="Transparent"
+                                                 Grid.Row="1">
+
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate DataType="{x:Type local:Letter}">
+                                                    <Grid x:Name="AnswerGrid"
+                                                          Background="{Binding ElementName=MainBorder, Path=Background}">
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition/>
+                                                            <RowDefinition/>
+                                                        </Grid.RowDefinitions>
+
+                                                        <!--Option-->
+                                                        <Grid Grid.Row="0">
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="50"/>
+                                                                <ColumnDefinition/>
+                                                                <ColumnDefinition Width="40"/>
+                                                                <ColumnDefinition Width="40"/>
+                                                            </Grid.ColumnDefinitions>
+
+                                                            <!--Option Letter-->
+                                                            <CheckBox Width="30" Height="30"/>
+
+                                                            <!--Option Prompt-->
+                                                            <local:TextBoxCustom Placeholder="Option" 
+                                                                                 Grid.Column="1"
+                                                                                 Margin="2,5,5,5"/>
+
+                                                            <!--Add Image Placeholder-->
+                                                            <Button Style="{StaticResource ImageBtn}"
+                                                                    Width="30"
+                                                                    Height="30"
+                                                                    Grid.Column="2"
+                                                                    HorizontalAlignment="Center"
+                                                                    ToolTip="Add Image"
+                                                                    Visibility="{Binding ElementName=AnswerGrid, Path=IsMouseOver, Converter={StaticResource BoolToVis}}">
+                                                                <Button.Content>
+                                                                    <Image Source="/Icons/ImagePlaceholder.png"/>
+                                                                </Button.Content>
+                                                            </Button>
+
+                                                            <!--Remove Option-->
+                                                            <Button Style="{StaticResource ImageBtn}"
+                                                                    Width="30"
+                                                                    Height="30"
+                                                                    Grid.Column="3"
+                                                                    HorizontalAlignment="Center"
+                                                                    ToolTip="Remove Option"
+                                                                    Visibility="{Binding ElementName=AnswerGrid, Path=IsMouseOver, Converter={StaticResource BoolToVis}}">
+                                                                <Button.Content>
+                                                                    <Image Source="/Icons/Close.png"/>
+                                                                </Button.Content>
+                                                            </Button>
+                                                        </Grid>
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                            <ListBox.Items>
+                                                <local:Letter Character="A"/>
+                                                <local:Letter Character="B"/>
+                                                <local:Letter Character="C"/>
+                                            </ListBox.Items>
+                                            <ListBox.ItemContainerStyle>
+                                                <!--This style eliminates any background colors-->
+                                                <Style TargetType="ListBoxItem">
+                                                    <Setter Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate TargetType="ListBoxItem">
+                                                                <ContentPresenter/>
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </ListBox.ItemContainerStyle>
+                                        </ListBox>
+
+                                        <!--Add Option-->
+                                        <Button Style="{StaticResource BlueTextBtn}"
+                                                Content="Add Option"
+                                                HorizontalAlignment="Left"
+                                                Margin="56,5,0,0"/>
+                                    </StackPanel>
+
+                                    <!--Footer-->
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <!--Partial Credit-->
+                                        <StackPanel Orientation="Horizontal">
+                                            <local:OnOffSwitch ToolTip="Award partial credit for checkboxes correctly chosen"/>
+                                            <TextBlock Text="Partial Credit"
+                                                       Foreground="{StaticResource DarkGray2}"
+                                                       VerticalAlignment="Center"
+                                                       Margin="10,0,0,0"/>
+                                        </StackPanel>
+                                        
+
+
+                                        <!--Delete Button-->
+                                        <Button Style="{StaticResource FlatRedBtn}"
+                                                Content="Delete"
+                                                Grid.Column="1"/>
+
+                                        <!--Point Value-->
+                                        <local:LargeNumber IsEditable="True" 
+                                                           Size="Small"
+                                                           Label="Pts"
+                                                           Grid.Column="2"
+                                                           HorizontalAlignment="Right"
+                                                           Margin="0,0,10,0"/>
+
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+
+                        </Grid>
+
+                    </Border>
+                </DataTemplate>
+                
+                <!--True / False Question-->
+                <DataTemplate DataType="{x:Type local:TrueFalse}">
+                    <Border Name="TrueFalseQuestion"
+                            Margin="10"
+                            CornerRadius="10"
+                            Background="{StaticResource FlatBlue}">
+
+                        <Grid VerticalAlignment="Top">
+
+                            <!--Move Question-->
+                            <Button VerticalAlignment="Top"
+                                    Height="20"
+                                    Cursor="SizeAll">
+                                <Button.Content>
+                                    <Image Source="/Icons/Move.png" Height="8"/>
+                                </Button.Content>
+                                <Button.Style>
+                                    <Style BasedOn="{StaticResource ImageBtn}" TargetType="{x:Type Button}">
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="Transparent"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+
+                            <Border CornerRadius="10"
+                                    Name="MainBorder"
+                                    Background="{StaticResource LightGray2}"
+                                    Margin="5,20">
+
+                                <StackPanel VerticalAlignment="Top"
+                                            Margin="5">
+
+                                    <!--Header-->
+                                    <ContentControl Content="{StaticResource Header}"/>
+
+                                    <!--Answer-->
+                                    
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ListBox.Resources>
+            <ListBox.ItemContainerStyle>
+                <!--This style eliminates any background colors-->
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListBoxItem">
+                                <ContentPresenter/>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListBox.ItemContainerStyle>
+        </ListBox>
+
+
+    </Grid>
+</UserControl>

@@ -259,9 +259,9 @@
             <RadioButton Name="NoTests_RB"    Content="No Tests"     Margin="3" IsChecked="False"/>
             <RadioButton Name="SelectTest_RB" Content="Select Tests" Margin="3" IsChecked="False"/>
             <RadioButton Name="ResultsView_RB" Content="Test Results" Margin="3" IsChecked="False"/>
-            <RadioButton Name="TestCurve_RB" Content="Test Curve" Margin="3" IsChecked="False"/>
+            <RadioButton Name="TestCurve_RB" Content="Test Curve" Margin="3" IsChecked="True"/>
             <RadioButton Name="PrintAnswers_RB" Content="Print" Margin="3" IsChecked="False"/>
-            <RadioButton Name="ExportTo_Rb" Content="Export" Margin="3" IsChecked="True"/>
+            <RadioButton Name="ExportTo_Rb" Content="Export" Margin="3" IsChecked="False"/>
         </DockPanel>
 
         <!--Select Test to Grade Grid-->
@@ -688,6 +688,7 @@
                 
                 <!--Curve Types-->
                 <StackPanel Grid.Column="0" Background="{StaticResource LightGray2}">
+                    <RadioButton Name="NoCurve_RB" ContentStringFormat="None"                           Style="{StaticResource GrayTabToggle}"/>
                     <RadioButton Name="FullCreditCurve_RB" ContentStringFormat="Full-Credit Curve"      Style="{StaticResource GrayTabToggle}"/>
                     <RadioButton Name="FlatCurve_RB" ContentStringFormat="Flat"                         Style="{StaticResource GrayTabToggle}"/>
                     <RadioButton Name="BellCurve_RB" ContentStringFormat="Bell Curve"                   Style="{StaticResource GrayTabToggle}"/>
@@ -742,7 +743,7 @@
                                                      Grid.Row="1"
                                                  StrokeColor="{StaticResource FlatRed}"
                                                  Foreground="{StaticResource DarkGray1}"
-                                                 Label="Average Score"
+                                                 Label="Lowest Score"
                                                  Grid.Column="2"/>
                         </Grid>
 
@@ -761,26 +762,38 @@
                             <!--Instructions-->
                             <local:InstructionsUIHelper Label="Curve Description"/>
 
-                            <!--Full-Credit Curve Description-->
-                            <TextBlock Text="All students will receive a flat curve of the amount of points it takes to give the highest scoring student a perfect score."
-                                       TextWrapping="Wrap"
-                                       Visibility="{Binding ElementName=FullCreditCurve_RB, Path=IsChecked, Converter={StaticResource BoolToVis}}"
+                            <!--No Curve Description-->
+                            <TextBlock TextWrapping="Wrap"
                                        TextAlignment="Center"
                                        Margin="10"
-                                       Grid.Row="1"/>
-                            <!--Flat Curve Description-->
-                            <TextBlock Text="All students will receive the same variable amount of points."                                       
-                                       Visibility="{Binding ElementName=FlatCurve_RB, Path=IsChecked, Converter={StaticResource BoolToVis}}"
-                                       TextAlignment="Center"
-                                       Margin="10"
-                                       Grid.Row="1"/>
+                                       Grid.Row="1">
+                                <TextBlock.Style>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Style.Triggers>
+                                            
+                                            <!--Full-Credit Curve Description-->
+                                            <DataTrigger Binding="{Binding ElementName=FullCreditCurve_RB, Path=IsChecked}" Value="True">
+                                                <Setter Property="Text" Value="All students will receive a flat curve of the amount of points it takes to give the highest scoring student a perfect score."/>
+                                            </DataTrigger>
 
-                            <!--Bell Curve Description-->
-                            <TextBlock Text="Bell Curve Description"
-                                       Visibility="{Binding ElementName=BellCurve_RB, Path=IsChecked, Converter={StaticResource BoolToVis}}"
-                                       TextAlignment="Center"
-                                       Margin="10"
-                                       Grid.Row="1"/>
+                                            <!--Flat Curve Description-->
+                                            <DataTrigger Binding="{Binding ElementName=FlatCurve_RB, Path=IsChecked}" Value="True">
+                                                <Setter Property="Text" Value="All students will receive the same variable amount of points."/>
+                                            </DataTrigger>
+
+                                            <!--Bell Curve Description-->
+                                            <DataTrigger Binding="{Binding ElementName=BellCurve_RB, Path=IsChecked}" Value="True">
+                                                <Setter Property="Text" Value="Bell Curve Description"/>
+                                            </DataTrigger>
+
+                                            <!--No Curve Description-->
+                                            <DataTrigger Binding="{Binding ElementName=NoCurve_RB, Path=IsChecked}" Value="True">
+                                                <Setter Property="Text" Value="No curve has been applied."/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
                         </Grid>
 
                     </Border>
@@ -791,29 +804,55 @@
                             Background="{StaticResource LightGray2}"
                             Grid.Row="2">
 
-                        <!--Flat Curve Properties-->
-                        <Grid Visibility="{Binding ElementName=FlatCurve_RB, Path=IsChecked, Converter={StaticResource BoolToVis}}">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="30"/>
-                                <RowDefinition Height="50"/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
+                        <Grid>
+                            <!--Full-Credit Curve-->
+                            <Grid Visibility="{Binding ElementName=FullCreditCurve_RB, Path=IsChecked, Converter={StaticResource BoolToVis}}">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="30"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
 
-                            <!--Instruction-->
-                            <local:InstructionsUIHelper Label="Adjust Curve"/>
+                                <!--Instruction-->
+                                <local:InstructionsUIHelper Label="Curve Applied"/>
 
-                            <Slider x:Name="AdjustCurve_Slider"
+                                <local:LargeNumber Number="25"
+                                                   Label="Pts"
+                                                   Grid.Row="1"/>
+                            </Grid>
+
+                            <!--Flat Curve Properties-->
+                            <Grid Visibility="{Binding ElementName=FlatCurve_RB, Path=IsChecked, Converter={StaticResource BoolToVis}}">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="30"/>
+                                    <RowDefinition Height="50"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+
+                                <!--Instruction-->
+                                <local:InstructionsUIHelper Label="Adjust Curve"/>
+
+                                <Slider x:Name="AdjustCurve_Slider"
                                     Grid.Row="1" 
                                     Style="{StaticResource SliderStyle}"
                                     Maximum="100"
                                     MaxWidth="600"
                                     VerticalAlignment="Center"/>
 
-                            <TextBlock Text="{Binding ElementName=AdjustCurve_Slider, Path=Value, StringFormat={}{0:#,0#.0} Pts}"
+                                <local:LargeNumber Number="{Binding ElementName=AdjustCurve_Slider, Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:#,0#.0}}"
+                                               IsNumber="True"
+                                               IsEditable="True"
+                                               Label="Pts"
+                                               Size="Small"
+                                               Grid.Row="2"
+                                               HorizontalAlignment="Center"/>
+                                <!--<TextBlock Text="{Binding ElementName=AdjustCurve_Slider, Path=Value, StringFormat={}{0:#,0#.0} Pts}"
                                        Grid.Row="2"
                                        Foreground="{StaticResource DarkGray3}"
-                                       HorizontalAlignment="Center"/>
+                                       HorizontalAlignment="Center"/>-->
+                            </Grid>
                         </Grid>
+                          
+
                     </Border>
                 </Grid>
             </Grid>

@@ -33,7 +33,7 @@
                     <ControlTemplate TargetType="{x:Type ToggleButton}">
                         <Border x:Name="main_Grid" CornerRadius="5,5,0,0" BorderThickness="1.5,1.5,1.5,0" BorderBrush="{StaticResource LightGray2}" Width="150">
                             <Grid>
-                                <TextBlock x:Name="Header_Txtblk" Text="{TemplateBinding ToolTip}" VerticalAlignment="Center" TextAlignment="Center"/>
+                                <TextBlock x:Name="Header_Txtblk" Text="{TemplateBinding ContentStringFormat}" VerticalAlignment="Center" TextAlignment="Center"/>
                                 <ContentPresenter/>
                             </Grid>
                         </Border>
@@ -205,26 +205,33 @@
                   Height="30"
                   VerticalAlignment="Top">
                 <DockPanel HorizontalAlignment="Left">
+                    
+                    <!--Settings Tab-->
                     <RadioButton Name="Settings_TgleBtn"
-                                 ToolTip="Properties"
+                                 ContentStringFormat="Properties"
                                  IsChecked="False"
                                  Style="{StaticResource TabButton}">
 
                     </RadioButton>
                     <RadioButton Name="Questions_TgleBtn" 
-                                 ToolTip="Questions" 
-                                 IsChecked="False" 
+                                 ContentStringFormat="Questions" 
+                                 IsChecked="True" 
                                  Style="{StaticResource TabButton}"/>
 
                     <RadioButton Name="Sections_TgleBtn" 
-                                 ToolTip="Sections" 
+                                 ContentStringFormat="Sections" 
                                  Style="{StaticResource TabButton}"
                                  IsChecked="False"/>
 
                     <RadioButton Name="WordBox_TgleBtn" 
-                                 ToolTip="Word Boxes" 
+                                 ContentStringFormat="Word Boxes" 
                                  Style="{StaticResource TabButton}" 
-                                 IsChecked="True"/>
+                                 IsChecked="False"/>
+
+                    <RadioButton Name="TestPreview_TgleBtn" 
+                                 ContentStringFormat="Preview" 
+                                 Style="{StaticResource TabButton}" 
+                                 IsChecked="False"/>
                 </DockPanel>
             </Grid>
 
@@ -247,7 +254,6 @@
                                 <RowDefinition Height="150"/>
                                 <RowDefinition Height="100"/>
                                 <RowDefinition Height="150"/>
-                                <RowDefinition Height="100"/>
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
 
@@ -309,7 +315,7 @@
 
                                 <!--Test Points-->
                                 <local:NumberCarousel Label="Pts"
-                                                      Number="150"
+                                                      Number="100"
                                                       Size="Small"
                                                       HorizontalAlignment="Center"/>
                             </StackPanel>
@@ -321,51 +327,38 @@
                                 <local:InstructionsUIHelper Label="Point Distribution"
                                                             MaxWidth="{StaticResource maxWidth}"/>
 
-                                <!--Individual Points Selector-->
-                                <local:Switch Width="300" 
+
+                                <StackPanel Orientation="Horizontal"
+                                            HorizontalAlignment="Center">
+                                    
+                                    <!--Individual Points Selector-->
+                                    <local:Switch Width="300" 
                                               Margin="0,10,0,0"
                                               IsLeftChecked="True"
                                               LeftLabel="Same"
                                               RightLabel="Individual"/>
-                            </StackPanel>
-
-                            <!--Past Statistics-->
-                            <StackPanel Grid.Row="4">
-
-                                <!--Instructions-->
-                                <local:InstructionsUIHelper Label="Past Statistics"
-                                                            MaxWidth="{StaticResource maxWidth}"/>
-
-                                <Grid HorizontalAlignment="Center">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition MinWidth="100" 
-                                                          MaxWidth="175"/>
-                                        <ColumnDefinition MinWidth="100"
-                                                          MaxWidth="175"/>
-                                        <ColumnDefinition MinWidth="100"
-                                                          MaxWidth="175"/>
-                                    </Grid.ColumnDefinitions>
-
-                                    <!--Highest Score-->
-                                    <local:CircleProgressBar Value="100"
-                                                             StrokeColor="{StaticResource FlatGreen}"
-                                                             Foreground="{StaticResource DarkGray1}"
-                                                             Label="Highest Score"/>
-
-                                    <!--Average Score-->
-                                    <local:CircleProgressBar Value="75"
-                                                             StrokeColor="{StaticResource FlatYellow}"
-                                                             Foreground="{StaticResource DarkGray1}"
-                                                             Label="Average Score"
-                                                             Grid.Column="1"/>
-
-                                    <!--Lowest Score-->
-                                    <local:CircleProgressBar Value="60"
-                                                             StrokeColor="{StaticResource FlatRed}"
-                                                             Foreground="{StaticResource DarkGray1}"
-                                                             Label="Average Score"
-                                                             Grid.Column="2"/>
-                                </Grid>
+                                    
+                                    <!--Question Mark-->
+                                    <ToggleButton Name="PointDistributionHelp_TgleBtn" Style="{StaticResource ImageFlatGrayToggleBtn}"
+                                                  VerticalAlignment="Bottom"
+                                                  Margin="20,0,0,0"
+                                                  IsChecked="True">
+                                        <ToggleButton.Content>
+                                            <Image Source="/Icons/QuestionMark.png"
+                                                   Height="30"/>
+                                        </ToggleButton.Content>
+                                    </ToggleButton>
+                                </StackPanel>
+                                
+                                <!--Point Distribution Explanation-->
+                                <StackPanel HorizontalAlignment="Center"
+                                            Margin="10"
+                                            Visibility="{Binding ElementName=PointDistributionHelp_TgleBtn, Path=IsChecked, Converter={StaticResource BoolToCollapse}}">
+                                    <TextBlock TextAlignment="Center">
+                                        Should all questions receive the same amount of points <LineBreak/> or are some questions worth more than others?
+                                    </TextBlock>
+                                </StackPanel>
+                                
                             </StackPanel>
                         </Grid>
                     </ScrollViewer>
@@ -386,528 +379,9 @@
                         <RowDefinition/>
                         <RowDefinition Height="50"/>
                     </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition Width="{StaticResource SidePanelWidth}"/>
-                    </Grid.ColumnDefinitions>
 
-                    <!--Add Question Buttons-->
-                    <Grid Grid.Row="0"
-                              Grid.Column="0"
-                          Background="{StaticResource LightGray2}">
-
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-
-                        <!--Instructions-->
-                        <local:InstructionsUIHelper Label="Add A Question"/>
-
-                        <!--Add Question Buttons-->
-                        <WrapPanel HorizontalAlignment="Center"
-                                   Grid.Row="1">
-
-                            <!--Add Multiple Choice Button-->
-                            <Button Content="Multiple Choice" 
-                                Margin="10"
-                                Style="{StaticResource FlatBlueBtn}"/>
-
-                            <!--Add Matching Button-->
-                            <Button Content="Matching" 
-                                Margin="10"
-                                Style="{StaticResource FlatBlueBtn}"/>
-
-                            <!--Add True / False Button-->
-                            <Button Content="True / False" 
-                                Margin="10"
-                                Style="{StaticResource FlatBlueBtn}"/>
-
-                            <!--Add Short Answer Button-->
-                            <Button Content="Short Answer" 
-                                Margin="10"
-                                Style="{StaticResource FlatBlueBtn}"/>
-
-                            <!--Add Show Your Work Button-->
-                            <Button Content="Show Your Work" 
-                                Margin="10"
-                                Style="{StaticResource FlatBlueBtn}"/>
-
-                            <!--Add Essay Button-->
-                            <Button Content="Essay" 
-                                Margin="10"
-                                Style="{StaticResource FlatBlueBtn}"/>
-                        </WrapPanel>
-
-                        <!--DEBUG QUESTION SWITCHER-->
-                        <WrapPanel VerticalAlignment="Bottom" Grid.Row="1" HorizontalAlignment="Center">
-                            <RadioButton IsChecked="True" Name="MultChoice_RB" Content="Mult Choice" Margin="2,0"/>
-                            <RadioButton IsChecked="False" Name="Matching_RB" Content="Matching" Margin="2,0"/>
-                            <RadioButton IsChecked="False" Name="TrueFalse_RB" Content="True / False" Margin="2,0"/>
-                            <RadioButton IsChecked="False" Name="ShowYourWork_RB" Content="Show Your Work" Margin="2,0"/>
-                            <RadioButton IsChecked="False" Name="ShortAnswer_RB" Content="Short Answer" Margin="2,0"/>
-                            <RadioButton IsChecked="False" Name="Essay_RB" Content="Essay" Margin="2,0"/>
-                        </WrapPanel>
-                    </Grid>
-
-                    <ScrollViewer VerticalScrollBarVisibility="Auto" 
-                                              HorizontalScrollBarVisibility="Disabled"
-                                              Grid.Column="1">
-
-                        <Border CornerRadius="10"
-                                    Background="{StaticResource LightGray3}"
-                                    Margin="5">
-
-                            <!--Question Settings-->
-                            <Grid Margin="10">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="40"/>
-                                    <RowDefinition Height="60"/>
-                                    <RowDefinition/>
-                                    <RowDefinition Height="40"/>
-                                </Grid.RowDefinitions>
-
-                                <!--Question Properties Header-->
-                                <Label Content="Question Properties" 
-                                           FontSize="20"
-                                           Foreground="{StaticResource DarkGray1}"
-                                           VerticalAlignment="Center" 
-                                           Grid.Row="0"
-                                           HorizontalAlignment="Left"/>
-
-                                <!--Question Type-->
-                                <StackPanel Grid.Row="1">
-                                    <Label Content="Question Type:"
-                                               Foreground="{StaticResource DarkGray1}"/>
-
-                                    <ComboBox SelectedIndex="0"
-                                                  Height="30">
-                                        <ComboBox.Items>
-                                            <TextBlock Text="Multiple Choice" TextAlignment="Center"/>
-                                            <TextBlock Text="Matching" TextAlignment="Center"/>
-                                            <TextBlock Text="True / False" TextAlignment="Center"/>
-                                            <TextBlock Text="Short Answer" TextAlignment="Center"/>
-                                            <TextBlock Text="Show Your Work" TextAlignment="Center"/>
-                                            <TextBlock Text="Essay" TextAlignment="Center"/>
-                                        </ComboBox.Items>
-                                    </ComboBox>
-                                </StackPanel>
-
-                                <!--Question Specific Properties-->
-                                <Grid Grid.Row="2">
-
-                                    <!--Multiple Choice Grid-->
-                                    <Grid Visibility="{Binding ElementName=MultChoice_RB, Path=IsChecked, Converter={StaticResource BoolToVis}}"
-                                          VerticalAlignment="Top">
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="{StaticResource RowLength}"/>
-                                            <RowDefinition/>
-                                            <RowDefinition/>
-                                            <RowDefinition Height="100"/>
-                                            <RowDefinition/>
-                                            <RowDefinition/>
-                                            <RowDefinition Height="50"/>
-                                        </Grid.RowDefinitions>
-
-                                        <!--Question Number and Answer Choice Number-->
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition/>
-                                                <ColumnDefinition/>
-                                            </Grid.ColumnDefinitions>
-
-                                            <!--Question Number-->
-                                            <local:LargeNumber Number="1" 
-                                                                   Margin="0,15,0,0"
-                                                                   Label="Question Number"
-                                                                   LabelPosition="Right"
-                                                                   Grid.Column="0"
-                                                                   VerticalAlignment="Center"
-                                                                   LabelWidth="60"
-                                                                   Size="Medium"/>
-
-                                            <!--Number of Answers-->
-                                            <local:NumberCarousel Number="4" 
-                                                                      MaxNumber="26"
-                                                                      MinNumber="1"
-                                                                      Size="Medium"
-                                                                      LabelWidth="50"
-                                                                      Label="Answer Choices"
-                                                                      HorizontalAlignment="Center"
-                                                                      Grid.Column="1"/>
-                                        </Grid>
-                                        
-                                        <!--Question Prompt-->
-                                        <StackPanel Grid.Row="1">
-                                            <Label Content="Question"
-                                                   Foreground="{StaticResource DarkGray1}"/>
-                                            <local:TextBoxCustom Placeholder="Question Prompt"/>
-                                        </StackPanel>
-                                        
-                                        <!--Answer-->
-                                        <StackPanel Grid.Row="2">
-                                            <Label Content="Answer" 
-                                                       Foreground="{StaticResource DarkGray1}"/>
-                                            <Border CornerRadius="5"
-                                                        Background="{StaticResource ControlGray}">
-                                                <Grid>
-                                                    <WrapPanel Margin="5" Visibility="{Binding ElementName=MC_RequireMultipleAnswers_Switch, Path=IsChecked, Converter={StaticResource InverseBoolToCollapse}}">
-                                                        <RadioButton Style="{StaticResource LetterToggleBtn}" Content="A"/>
-                                                        <RadioButton Style="{StaticResource LetterToggleBtn}" Content="B"/>
-                                                        <RadioButton Style="{StaticResource LetterToggleBtn}" Content="C"/>
-                                                        <RadioButton Style="{StaticResource LetterToggleBtn}" Content="D"/>
-                                                    </WrapPanel>
-                                                    <WrapPanel Margin="5" Visibility="{Binding ElementName=MC_RequireMultipleAnswers_Switch, Path=IsChecked, Converter={StaticResource BoolToCollapse}}">
-                                                        <ToggleButton Style="{StaticResource LetterToggleBtn}" Content="A"/>
-                                                        <ToggleButton Style="{StaticResource LetterToggleBtn}" Content="B"/>
-                                                        <ToggleButton Style="{StaticResource LetterToggleBtn}" Content="C"/>
-                                                        <ToggleButton Style="{StaticResource LetterToggleBtn}" Content="D"/>
-                                                    </WrapPanel>
-                                                </Grid>
-
-                                            </Border>
-                                        </StackPanel>
-
-                                        <!--Suggested Layouts-->
-                                        <StackPanel Grid.Row="3">
-                                            <Label Content="Suggested Layouts" 
-                                                       Foreground="{StaticResource DarkGray1}"/>
-                                            <ComboBox Height="55" SelectedIndex="0">
-                                                <ComboBox.Items>
-                                                    <StackPanel Orientation="Horizontal">
-                                                        <ToggleButton Style="{StaticResource LetterToggleBtn}" Content="A" IsEnabled="False"/>
-                                                        <ToggleButton Style="{StaticResource LetterToggleBtn}" Content="B" IsEnabled="False"/>
-                                                        <ToggleButton Style="{StaticResource LetterToggleBtn}" Content="C" IsEnabled="False"/>
-                                                        <ToggleButton Style="{StaticResource LetterToggleBtn}" Content="D" IsEnabled="False"/>
-                                                    </StackPanel>
-                                                    <StackPanel Orientation="Horizontal">
-                                                        <ToggleButton Style="{StaticResource LetterToggleBtn}" Content="I" IsEnabled="False"/>
-                                                        <ToggleButton Style="{StaticResource LetterToggleBtn}" Content="J" IsEnabled="False"/>
-                                                        <ToggleButton Style="{StaticResource LetterToggleBtn}" Content="K" IsEnabled="False"/>
-                                                        <ToggleButton Style="{StaticResource LetterToggleBtn}" Content="L" IsEnabled="False"/>
-                                                    </StackPanel>
-                                                </ComboBox.Items>
-                                            </ComboBox>
-                                        </StackPanel>
-
-                                        <!--Starting Choice-->
-                                        <StackPanel Grid.Row="4">
-                                            <Label Content="Starting Choice" 
-                                                       Foreground="{StaticResource DarkGray1}"/>
-                                            <local:LetterSelector Grid.Row="1"/>
-                                        </StackPanel>
-
-                                        <!--Point Value-->
-                                        <StackPanel Grid.Row="5">
-                                            <Label Content="Point Value"
-                                                   Foreground="{StaticResource DarkGray1}"/>
-                                            <local:TextBoxCustom Placeholder="Ex: 4"/>
-                                        </StackPanel>
-
-                                        <!--Require Multiple Answers-->
-                                        <DockPanel Grid.Row="6">
-                                            <Label Content="Require Multiple Answers" 
-                                                       VerticalAlignment="Center"
-                                                       Foreground="{StaticResource DarkGray1}"/>
-                                            <local:OnOffSwitch x:Name="MC_RequireMultipleAnswers_Switch" HorizontalAlignment="Right"/>
-                                        </DockPanel>
-                                    </Grid>
-
-                                    <!--Matching Grid-->
-                                    <Grid Visibility="{Binding ElementName=Matching_RB, Path=IsChecked, Converter={StaticResource BoolToVis}}"
-                                              VerticalAlignment="Top">
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="{StaticResource RowLength}"/>
-                                            <RowDefinition/>
-                                            <RowDefinition Height="{StaticResource LabelWithComboBoxLength}"/>
-                                            <RowDefinition/>
-                                            <RowDefinition/>
-                                        </Grid.RowDefinitions>
-
-                                        <!--Question Number and Answer Choice Number-->
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition/>
-                                                <ColumnDefinition/>
-                                            </Grid.ColumnDefinitions>
-
-                                            <!--Question Number-->
-                                            <local:LargeNumber Number="2" 
-                                                                   Label="Question Number"
-                                                                   LabelPosition="Right"
-                                                                   Grid.Column="0"
-                                                                   VerticalAlignment="Center"
-                                                                   LabelWidth="60"
-                                                                   Size="Medium"/>
-
-                                            <!--Number of Correct Answers-->
-                                            <local:LargeNumber Number="2"
-                                                                   Label="Correct Answers"
-                                                                   LabelPosition="Right"
-                                                                   LabelWidth="60"
-                                                                   Grid.Column="1"
-                                                                   VerticalAlignment="Center"
-                                                                   Size="Medium"/>
-                                        </Grid>
-
-                                        <!--Question Prompt-->
-                                        <StackPanel Grid.Row="1">
-                                            <Label Content="Question"
-                                                   Foreground="{StaticResource DarkGray1}"/>
-                                            <local:TextBoxCustom Placeholder="Question Prompt"/>
-                                        </StackPanel>
-                                        
-                                        <!--Word Box-->
-                                        <StackPanel Grid.Row="2">
-                                            <Label Content="Word Box" 
-                                                       Foreground="{StaticResource DarkGray1}"/>
-
-                                            <ComboBox SelectedIndex="0"
-                                                  Height="30">
-                                                <ComboBox.Items>
-                                                    <TextBlock Text="Word Box #1" TextAlignment="Center"/>
-                                                    <TextBlock Text="Word Box #2" TextAlignment="Center"/>
-                                                    <TextBlock Text="Word Box #3" TextAlignment="Center"/>
-                                                    <TextBlock Text="Word Box #4" TextAlignment="Center"/>
-                                                    <TextBlock Text="Word Box #5" TextAlignment="Center"/>
-                                                    <Button Style="{StaticResource BlueTextBtn}" Content="Create New Wordbox"/>
-                                                </ComboBox.Items>
-                                            </ComboBox>
-                                        </StackPanel>
-
-                                        <!--Answer(s)-->
-                                        <StackPanel Grid.Row="3">
-                                            <Label Content="Answers" 
-                                                       Foreground="{StaticResource DarkGray1}"/>
-
-                                            <local:LetterSelector Grid.Row="1" 
-                                                                      Margin="0,0,0,15"/>
-                                        </StackPanel>
-
-                                        <!--Point Value-->
-                                        <StackPanel Grid.Row="4">
-                                            <Label Content="Point Value"
-                                                   Foreground="{StaticResource DarkGray1}"/>
-                                            <local:TextBoxCustom Placeholder="Ex: 4"/>
-                                        </StackPanel>
-                                    </Grid>
-
-                                    <!--True / False Grid-->
-                                    <Grid Visibility="{Binding ElementName=TrueFalse_RB, Path=IsChecked, Converter={StaticResource BoolToVis}}"
-                                              VerticalAlignment="Top">
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="{StaticResource RowLength}"/>
-                                            <RowDefinition/>
-                                            <RowDefinition Height="{StaticResource LabelWithComboBoxLength}"/>
-                                            <RowDefinition/>
-                                            <RowDefinition Height="{StaticResource LabelWithComboBoxLength}"/>
-                                        </Grid.RowDefinitions>
-
-                                        <!--Question Number-->
-                                        <Grid Grid.Row="0">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition/>
-                                                <ColumnDefinition/>
-                                            </Grid.ColumnDefinitions>
-
-                                            <local:LargeNumber Number="2" 
-                                                                   Label="Question Number"
-                                                                   LabelPosition="Right"
-                                                                   Grid.Column="0"
-                                                                   VerticalAlignment="Center"
-                                                                   LabelWidth="60"
-                                                                   Size="Medium"/>
-                                        </Grid>
-
-                                        <!--Question Prompt-->
-                                        <StackPanel Grid.Row="1">
-                                            <Label Content="Question"
-                                                   Foreground="{StaticResource DarkGray1}"/>
-                                            <local:TextBoxCustom Placeholder="Question Prompt"/>
-                                        </StackPanel>
-
-                                        <!--Answer-->
-                                        <StackPanel Grid.Row="2">
-                                            <Label Content="Answer" 
-                                                       Foreground="{StaticResource DarkGray1}"/>
-
-                                            <local:Switch LeftLabel="True" 
-                                                              RightLabel="False"
-                                                              IsLeftChecked="True"/>
-                                        </StackPanel>
-
-                                        <!--Correct Answer if False-->
-                                        <StackPanel Grid.Row="3">
-                                            <DockPanel>
-                                                <Label Content="Correct Answer if False"
-                                                           Foreground="{StaticResource DarkGray1}"/>
-                                                <local:OnOffSwitch HorizontalAlignment="Right"/>
-                                            </DockPanel>
-
-                                            <!--Answer if False Textbox-->
-                                            <local:TextBoxCustom x:Name="AnswerIfFalse_Txtbox" 
-                                                                     Margin="0,5,0,0"
-                                                                     Placeholder="Answer" 
-                                                                     Text=""/>
-
-
-                                            <StackPanel Margin="0,5,0,0" Visibility="{Binding ElementName=AnswerIfFalse_Txtbox, Path=Text, Converter={StaticResource EmptyTextVisConverter}}">
-                                                <Label Content="Grading Criteria"
-                                                           HorizontalAlignment="Center"
-                                                           Foreground="{StaticResource DarkGray1}"/>
-
-                                                <local:Switch LeftLabel="Strict" 
-                                                                  RightLabel="Loose"
-                                                                  IsLeftChecked="True"
-                                                                  Width="200"/>
-                                            </StackPanel>
-                                        </StackPanel>
-
-                                        <!--Point Value-->
-                                        <StackPanel Grid.Row="4">
-                                            <Label Content="Point Value"
-                                                   Foreground="{StaticResource DarkGray1}"/>
-                                            <local:TextBoxCustom Placeholder="Ex: 4"/>
-                                        </StackPanel>
-                                    </Grid>
-
-                                    <!--Short Answer Grid-->
-                                    <Grid Visibility="{Binding ElementName=ShortAnswer_RB, Path=IsChecked, Converter={StaticResource BoolToVis}}"
-                                              VerticalAlignment="Top">
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="{StaticResource RowLength}"/>
-                                            <RowDefinition/>
-                                            <RowDefinition/>
-                                            <RowDefinition Height="{StaticResource LabelWithComboBoxLength}"/>
-                                            <RowDefinition Height="{StaticResource LabelWithComboBoxLength}"/>
-                                        </Grid.RowDefinitions>
-
-                                        <!--Question Number-->
-                                        <Grid Grid.Row="0">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition/>
-                                                <ColumnDefinition/>
-                                            </Grid.ColumnDefinitions>
-
-                                            <local:LargeNumber Number="4" 
-                                                                   Label="Question Number"
-                                                                   LabelPosition="Right"
-                                                                   Grid.Column="0"
-                                                                   VerticalAlignment="Center"
-                                                                   LabelWidth="60"
-                                                                   Size="Medium"/>
-
-                                            <local:LargeNumber Number="20" 
-                                                                   Label="Words Remaining"
-                                                                   LabelPosition="Right"
-                                                                   Grid.Column="1"
-                                                                   VerticalAlignment="Center"
-                                                                   LabelWidth="70"
-                                                                   Size="Medium"/>
-                                        </Grid>
-
-                                        <!--Question Prompt-->
-                                        <StackPanel Grid.Row="1">
-                                            <Label Content="Question"
-                                                   Foreground="{StaticResource DarkGray1}"/>
-                                            <local:TextBoxCustom Placeholder="Question Prompt"/>
-                                        </StackPanel>
-                                        
-                                        <!--Answer-->
-                                        <StackPanel Grid.Row="2">
-                                            <Label Content="Answer" 
-                                                       Foreground="{StaticResource DarkGray1}"/>
-
-                                            <local:TextBoxCustom Placeholder="Answer (20 Words Max)"
-                                                                     Text=""/>
-                                        </StackPanel>
-
-                                        <!--Grading Criteria-->
-                                        <StackPanel Margin="0,5,0,0"
-                                                        Grid.Row="3">
-                                            <Label Content="Grading Criteria"
-                                                       Foreground="{StaticResource DarkGray1}"/>
-
-                                            <local:Switch LeftLabel="Strict" 
-                                                              RightLabel="Loose"
-                                                              IsLeftChecked="True"/>
-                                        </StackPanel>
-
-                                        <!--Point Value-->
-                                        <StackPanel Grid.Row="4">
-                                            <Label Content="Point Value"
-                                                   Foreground="{StaticResource DarkGray1}"/>
-                                            <local:TextBoxCustom Placeholder="Ex: 4"/>
-                                        </StackPanel>
-                                    </Grid>
-
-                                    <!--Show Your Work Grid-->
-                                    <Grid Visibility="{Binding ElementName=ShowYourWork_RB, Path=IsChecked, Converter={StaticResource BoolToVis}}">
-
-                                    </Grid>
-
-                                    <!--Essay Grid-->
-                                    <Grid Visibility="{Binding ElementName=Essay_RB, Path=IsChecked, Converter={StaticResource BoolToVis}}"
-                                              VerticalAlignment="Top">
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="{StaticResource RowLength}"/>
-                                            <RowDefinition/>
-                                            <RowDefinition Height="{StaticResource LabelWithComboBoxLength}"/>
-                                            <RowDefinition Height="{StaticResource LabelWithComboBoxLength}"/>
-                                        </Grid.RowDefinitions>
-
-                                        <!--Question Number-->
-                                        <Grid Grid.Row="0">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition/>
-                                                <ColumnDefinition/>
-                                            </Grid.ColumnDefinitions>
-
-                                            <local:LargeNumber Number="6" 
-                                                                   Label="Question Number"
-                                                                   LabelPosition="Right"
-                                                                   Grid.Column="0"
-                                                                   VerticalAlignment="Center"
-                                                                   LabelWidth="60"
-                                                                   Size="Medium"/>
-                                        </Grid>
-
-                                        <!--Question Prompt-->
-                                        <StackPanel Grid.Row="1">
-                                            <Label Content="Question"
-                                                   Foreground="{StaticResource DarkGray1}"/>
-                                            <local:TextBoxCustom Placeholder="Question Prompt"/>
-                                        </StackPanel>
-
-                                        <!--Point Value-->
-                                        <StackPanel Grid.Row="2">
-                                            <Label Content="Point Value"
-                                                   Foreground="{StaticResource DarkGray1}"/>
-                                            <local:TextBoxCustom Placeholder="Ex: 4"/>
-                                        </StackPanel>
-                                        
-                                        <!--Essay Note - Disclaimer -->
-                                        <StackPanel Grid.Row="3">
-                                            <Label Content="Note"
-                                                   Foreground="{StaticResource DarkGray2}"/>
-                                            <TextBlock Text="This type of question cannot be automatically graded, so instead you will be prompted to grade them." 
-                                                   TextWrapping="Wrap"
-                                                   Foreground="{StaticResource DarkGray1}"/>
-                                        </StackPanel>
-                                    </Grid>
-                                </Grid>
-
-
-                                <!--Delete Button-->
-                                <Button Content="Delete"
-                                            Grid.Row="3"
-                                            Style="{StaticResource FlatRedBtn}"
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Center"/>
-                            </Grid>
-                        </Border>
-                    </ScrollViewer>
-
+                    <local:TestQuestions Margin="10"/>
+                    
                     <!--Finish Button-->
                     <Button Content="Finish"
                             Style="{StaticResource FlatBlueBtn}"
@@ -1168,7 +642,6 @@
                     </ScrollViewer>
                 </Grid>
                 
-                
                 <!--Word Box Grid-->
                 <Grid Visibility="{Binding ElementName=WordBox_TgleBtn, Path=IsChecked, Converter={StaticResource BoolToVis}}">
                     <Grid.ColumnDefinitions>
@@ -1283,7 +756,7 @@
                             </Style>
                         </ListBox.ItemContainerStyle>
                     </ListBox>
-                    
+
                     <!--Add Word Box Button-->
                     <Button Content="Add Word Box"
                             Style="{StaticResource FlatGreenBtn}"
@@ -1374,9 +847,6 @@
                         </Border>
                     </ScrollViewer>
                 </Grid>
-                
-                
-
             </Grid>
         </Grid>
     </Grid>

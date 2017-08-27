@@ -18,11 +18,11 @@ namespace AceGrading
 
         public TrueFalse()
         {
-            this.TestSection = this.ParentTest.RequiredSection;
-            this.SetAnswer(false);
-            this.AnswerIsFalse = false;
-            this.AnswerIsTrue = false;
-            Answer_If_False = null;
+            //this.TestSection = this.ParentTest.RequiredSection;
+            //this.SetAnswer(false);
+            //this.AnswerIsFalse = false;
+            //this.AnswerIsTrue = false;
+            //Answer_If_False = null;
         }
 
         //Public Attributes

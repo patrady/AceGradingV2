@@ -18,7 +18,7 @@
                             <Setter Property="Fill" Value="{StaticResource FlatBlue}"/>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding Type}" Value="Test">
-                            <Setter Property="Fill" Value="{StaticResource FlatOrange}"/>
+                            <Setter Property="Fill" Value="{StaticResource FlatDarkBlue}"/>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding Size}" Value="Small">
                             <Setter Property="Height" Value="30"/>

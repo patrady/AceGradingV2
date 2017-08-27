@@ -30,7 +30,8 @@
                                     <Setter Property="Background" Value="{StaticResource Blue}"/>
                                     <Setter Property="BorderBrush" Value="{StaticResource Blue}"/>
                                     <Setter TargetName="TextBlk" Property="Foreground" Value="White"/>
-                                </MultiTrigger>
+                                <Setter TargetName="TextBlk" Property="FontWeight" Value="Bold"/>
+                            </MultiTrigger>
                                 <MultiTrigger>
                                     <MultiTrigger.Conditions>
                                         <Condition Property="IsMouseOver" Value="False"/>
@@ -39,6 +40,7 @@
                                     <Setter Property="Background" Value="{StaticResource FlatBlue}"/>
                                     <Setter Property="BorderBrush" Value="{StaticResource FlatBlue}"/>
                                 <Setter TargetName="TextBlk" Property="Foreground" Value="White"/>
+                                <Setter TargetName="TextBlk" Property="FontWeight" Value="Bold"/>
                             </MultiTrigger>
                                 <MultiTrigger>
                                     <MultiTrigger.Conditions>
@@ -48,6 +50,7 @@
                                     <Setter Property="Background" Value="Transparent"/>
                                     <Setter Property="BorderBrush" Value="{StaticResource Blue}"/>
                                 <Setter TargetName="TextBlk" Property="Foreground" Value="{StaticResource DarkGray2}"/>
+                                <Setter TargetName="TextBlk" Property="FontWeight" Value="Regular"/>
                             </MultiTrigger>
                             <MultiTrigger>
                                 <MultiTrigger.Conditions>
@@ -57,6 +60,7 @@
                                 <Setter Property="Background" Value="Transparent"/>
                                 <Setter Property="BorderBrush" Value="{StaticResource FlatBlue}"/>
                                 <Setter TargetName="TextBlk" Property="Foreground" Value="{StaticResource DarkGray2}"/>
+                                <Setter TargetName="TextBlk" Property="FontWeight" Value="Regular"/>
                             </MultiTrigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -81,6 +85,7 @@
                                 <Setter Property="Background" Value="{StaticResource Blue}"/>
                                 <Setter Property="BorderBrush" Value="{StaticResource Blue}"/>
                                 <Setter TargetName="TextBlk" Property="Foreground" Value="White"/>
+                                <Setter TargetName="TextBlk" Property="FontWeight" Value="Bold"/>
                             </MultiTrigger>
                             <MultiTrigger>
                                 <MultiTrigger.Conditions>
@@ -90,6 +95,7 @@
                                 <Setter Property="Background" Value="{StaticResource FlatBlue}"/>
                                 <Setter Property="BorderBrush" Value="{StaticResource FlatBlue}"/>
                                 <Setter TargetName="TextBlk" Property="Foreground" Value="White"/>
+                                <Setter TargetName="TextBlk" Property="FontWeight" Value="Bold"/>
                             </MultiTrigger>
                             <MultiTrigger>
                                 <MultiTrigger.Conditions>
@@ -99,6 +105,7 @@
                                 <Setter Property="Background" Value="Transparent"/>
                                 <Setter Property="BorderBrush" Value="{StaticResource Blue}"/>
                                 <Setter TargetName="TextBlk" Property="Foreground" Value="{StaticResource DarkGray2}"/>
+                                <Setter TargetName="TextBlk" Property="FontWeight" Value="Regular"/>
                             </MultiTrigger>
                             <MultiTrigger>
                                 <MultiTrigger.Conditions>
@@ -108,6 +115,7 @@
                                 <Setter Property="Background" Value="Transparent"/>
                                 <Setter Property="BorderBrush" Value="{StaticResource FlatBlue}"/>
                                 <Setter TargetName="TextBlk" Property="Foreground" Value="{StaticResource DarkGray2}"/>
+                                <Setter TargetName="TextBlk" Property="FontWeight" Value="Regular"/>
                             </MultiTrigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -127,7 +135,8 @@
                      Style="{DynamicResource OnSwitch}" 
                      IsChecked="{Binding IsLeftChecked, FallbackValue=True}"
                      Grid.Column="0"
-                     Height="{StaticResource BtnHeight}"/>
+                     Height="{StaticResource BtnHeight}">
+        </RadioButton>
 
         <RadioButton Content="{Binding RightLabel, FallbackValue=RightLabel}" 
                      Style="{DynamicResource OffSwitch}" 

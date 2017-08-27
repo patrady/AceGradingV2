@@ -217,6 +217,7 @@
                                 <Button Style="{StaticResource RedDeleteBtn}" 
                                         Content="X"
                                         Margin="3"
+                                        Width="30"
                                         VerticalAlignment="Top" 
                                         HorizontalAlignment="Right"
                                         Visibility="{Binding Path=IsMouseOver, ElementName=StudentItem, Converter={StaticResource BoolToVis}}"/>
@@ -400,6 +401,7 @@
                                     <Button Style="{StaticResource RedDeleteBtn}" 
                                             Content="X"
                                             Margin="3"
+                                            Width="30"
                                             VerticalAlignment="Top" 
                                             HorizontalAlignment="Right"
                                             Visibility="{Binding Path=IsMouseOver, ElementName=StudentItem, Converter={StaticResource BoolToVis}}"/>

@@ -103,7 +103,6 @@ namespace AceGrading
             set { SetValue(LabelWidthProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for LabelWidth.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty LabelWidthProperty =
             DependencyProperty.Register("LabelWidth", typeof(double), typeof(NumberCarousel), new PropertyMetadata(double.MaxValue));
 

@@ -71,6 +71,11 @@
     <Compile Include="Controls\LetterSelector.xaml.cs">
       <DependentUpon>LetterSelector.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\TestQuestions.xaml.cs">
+      <DependentUpon>TestQuestions.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\Validations\StringToDoubleValidationRule.cs" />
+    <Compile Include="ViewModels\Validations\StringToIntegerValidationRule.cs" />
     <Compile Include="Views\TestResults.xaml.cs">
       <DependentUpon>TestResults.xaml</DependentUpon>
     </Compile>
@@ -115,8 +120,8 @@
     <Compile Include="Controls\InstructionsUIHelper.xaml.cs">
       <DependentUpon>InstructionsUIHelper.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\NumberHeader.xaml.cs">
-      <DependentUpon>NumberHeader.xaml</DependentUpon>
+    <Compile Include="Controls\LargeNumber.xaml.cs">
+      <DependentUpon>LargeNumber.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\ClassStructure.cs" />
     <Compile Include="Models\Test.cs" />
@@ -164,6 +169,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\LetterSelector.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TestQuestions.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -223,7 +232,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Controls\NumberHeader.xaml">
+    <Page Include="Controls\LargeNumber.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -308,6 +317,30 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Icons\Underline.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\QuestionMark.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\Play_Selected.png" />
+    <Resource Include="Icons\Play.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\ImagePlaceholder.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\Question\CheckBox.png" />
+    <Resource Include="Icons\Question\Essay.png" />
+    <Resource Include="Icons\Question\MultipleChoice.png" />
+    <Resource Include="Icons\Question\ShortAnswer.png" />
+    <Resource Include="Icons\Question\ShowWork.png" />
+    <Resource Include="Icons\Question\TrueFalse.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\Close.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\Move.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
